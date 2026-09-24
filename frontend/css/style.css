@@ -50,3 +50,10 @@ button:hover {
     /* Tono de mostaza un poco más oscuro al pasar el cursor */
     background-color: #b45309;
 }
+
+.contenedor-botones {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}

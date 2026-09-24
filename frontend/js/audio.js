@@ -1,37 +1,42 @@
 // Esperamos a que la página cargue por completo antes de interactuar con el DOM
 document.addEventListener("DOMContentLoaded", () => {
-    const botonReproducir = document.getElementById("boton-reproducir");
+    // 1. Seleccionamos todos los botones de notas musicales dentro del contenedor
+    const botonesNotas = document.querySelectorAll(".contenedor-botones button");
 
-    // Función encargada de sintetizar y reproducir un tono puro
-    function reproducirTonoPuro() {
-        // 1. Creamos el contexto de audio del navegador (el motor de sonido)
+    // 2. Función genérica para reproducir un tono basado en una frecuencia específica en Hertzios
+    function reproducirTono(frecuenciaHertzios) {
+        // Creamos el contexto de audio del navegador (el motor de sonido)
         const AudioContexto = window.AudioContext || window.webkitAudioContext;
         const contextoAudio = new AudioContexto();
 
-        // 2. Creamos un oscilador (es el generador de la onda matemática del sonido)
+        // Creamos el oscilador y configuramos su onda senoidal ('sine') para un tono limpio
         const oscilador = contextoAudio.createOscillator();
-        
-        // Configuramos el tipo de onda: 'sine' (senoidal) genera un tono limpio y suave
         oscilador.type = "sine";
         
-        // Frecuencia en Hertzios (440 Hz corresponde a la nota La estándar)
-        oscilador.frequency.setValueAtTime(440, contextoAudio.currentTime);
+        // Asignamos la frecuencia dinámica que recibimos por parámetro
+        oscilador.frequency.setValueAtTime(frecuenciaHertzios, contextoAudio.currentTime);
 
-        // 3. Creamos un control de volumen (GainNode) para evitar chasquidos molestos al iniciar/parar
+        // Creamos el control de volumen (GainNode) para proteger los oídos (10% de volumen)
         const nodoGanancia = contextoAudio.createGain();
-        nodoGanancia.gain.setValueAtTime(0.1, contextoAudio.currentTime); // Volumen al 10% por seguridad
+        nodoGanancia.gain.setValueAtTime(0.1, contextoAudio.currentTime);
 
-        // 4. Conectamos los bloques: Oscilador -> Control de Volumen -> Altavoces del dispositivo
+        // Conectamos los nodos: Oscilador -> Control de Volumen -> Salida de audio del dispositivo
         oscilador.connect(nodoGanancia);
         nodoGanancia.connect(contextoAudio.destination);
 
-        // 5. Iniciamos la reproducción del tono y programamos su apagado automático a los 1.5 segundos
+        // Iniciamos el sonido y programamos su apagado automático a los 1.2 segundos
         oscilador.start();
-        oscilador.stop(contextoAudio.currentTime + 1.5);
+        oscilador.stop(contextoAudio.currentTime + 1.2);
     }
 
-    // Vinculamos el evento de clic del botón a nuestra función de audio
-    botonReproducir.addEventListener("click", () => {
-        reproducirTonoPuro();
+    // 3. Recorremos cada botón de nota y le asignamos un evento de escucha individual
+    botonesNotas.forEach(boton => {
+        boton.addEventListener("click", () => {
+            // Extraemos el valor numérico de la frecuencia guardado en el atributo 'data-frecuencia'
+            const frecuencia = parseFloat(boton.getAttribute("data-frecuencia"));
+            
+            // Llamamos a nuestra función pasando la frecuencia correspondiente
+            reproducirTono(frecuencia);
+        });
     });
 });

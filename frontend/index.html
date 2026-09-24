@@ -10,8 +10,13 @@
 
     <div class="tarjeta-entrenamiento">
         <h1>Entrenamiento Auditivo</h1>
-        <p>Haz clic en el botón para escuchar un tono puro de prueba (440 Hz).</p>
-        <button id="boton-reproducir">Reproducir Tono</button>
+        <p>Haz clic en los botones para escuchar diferentes notas musicales:</p>
+        
+        <div class="contenedor-botones">
+            <button id="boton-do" data-frecuencia="261.63">Nota Do (C4)</button>
+            <button id="boton-mi" data-frecuencia="329.63">Nota Mi (E4)</button>
+            <button id="boton-sol" data-frecuencia="392.00">Nota Sol (G4)</button>
+        </div>
     </div>
 
     <!-- Vinculamos nuestro script de JavaScript modular -->
