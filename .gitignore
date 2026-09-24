@@ -1,0 +1,15 @@
+# Entorno virtual
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Base de datos local transaccional (opcional, si prefieres generarla fresh)
+backend/database.sqlite
+
+# Archivos de editor
+.vscode/
+.idea/
