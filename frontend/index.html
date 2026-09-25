@@ -10,16 +10,21 @@
 
     <div class="tarjeta-entrenamiento">
         <h1>Entrenamiento Auditivo</h1>
-        <p>Haz clic en los botones para escuchar diferentes notas musicales:</p>
+        <p>Escucha la nota secreta e intenta adivinar cuál es:</p>
         
+        <!-- Botón para generar y reproducir el reto aleatorio -->
+        <button id="boton-reto">Escuchar Nota Secreta</button>
+
+        <!-- Mensaje dinámico de acierto o error -->
+        <p id="mensaje-estado" class="mensaje-neutro">Haz clic en "Escuchar Nota Secreta" para comenzar.</p>
+
         <div class="contenedor-botones">
-            <button id="boton-do" data-frecuencia="261.63">Nota Do (C4)</button>
-            <button id="boton-mi" data-frecuencia="329.63">Nota Mi (E4)</button>
-            <button id="boton-sol" data-frecuencia="392.00">Nota Sol (G4)</button>
+            <button class="boton-nota" data-nota="Do" data-frecuencia="261.63">Nota Do (C4)</button>
+            <button class="boton-nota" data-nota="Mi" data-frecuencia="329.63">Nota Mi (E4)</button>
+            <button class="boton-nota" data-nota="Sol" data-frecuencia="392.00">Nota Sol (G4)</button>
         </div>
     </div>
 
-    <!-- Vinculamos nuestro script de JavaScript modular -->
     <script src="js/audio.js"></script>
 </body>
 </html>
