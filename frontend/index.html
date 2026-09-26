@@ -8,16 +8,16 @@
 </head>
 <body>
 
-    <div class="tarjeta-entrenamiento">
-        <h1>Entrenamiento Auditivo</h1>
+    <div class="tarjeta-juego">
+        <h2>Entrenamiento Auditivo</h2>
         <p>Escucha la nota secreta e intenta adivinar cuál es:</p>
         
-        <!-- Botón para generar y reproducir el reto aleatorio -->
+        <div id="marcador-puntaje" class="puntaje-badge">Puntaje Total: <span>0</span> pts</div>
+    
         <button id="boton-reto">Escuchar Nota Secreta</button>
-
-        <!-- Mensaje dinámico de acierto o error -->
+        
         <p id="mensaje-estado" class="mensaje-neutro">Haz clic en "Escuchar Nota Secreta" para comenzar.</p>
-
+    
         <div class="contenedor-botones">
             <button class="boton-nota" data-nota="Do" data-frecuencia="261.63">Nota Do (C4)</button>
             <button class="boton-nota" data-nota="Mi" data-frecuencia="329.63">Nota Mi (E4)</button>

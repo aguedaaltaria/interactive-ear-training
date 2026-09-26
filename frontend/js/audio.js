@@ -31,6 +31,9 @@
     const botonesNotas = document.querySelectorAll(".contenedor-botones .boton-nota");
     const botonReto = document.getElementById("boton-reto");
     const mensajeEstado = document.getElementById("mensaje-estado");
+    
+    // 🌟 NUEVO: Seleccionamos el span del marcador de puntaje
+    const spanPuntajeTotal = document.querySelector("#marcador-puntaje span");
 
     const bancoNotas = [
         { nombre: "Do", frecuencia: 261.63 },
@@ -39,8 +42,8 @@
     ];
 
     let notaSecreta = null;
+    let puntajeTotal = 0; // 🌟 NUEVO: Variable para llevar la cuenta en la sesión
 
-    // Función genérica para sintetizar y reproducir cualquier frecuencia de audio
     function reproducirTono(frecuenciaHertzios) {
         const AudioContexto = window.AudioContext || window.webkitAudioContext;
         const contextoAudio = new AudioContexto();
@@ -59,10 +62,8 @@
         oscilador.stop(contextoAudio.currentTime + 1.2);
     }
 
-    // 🚀 Día 6: Función para enviar el puntaje al backend de Flask mediante POST
     async function guardarPuntajeEnServidor(puntosGanados) {
         try {
-            // Actualizamos al puerto 5001 donde ahora vive nuestro Flask
             const respuesta = await fetch("http://localhost:5001/api/puntajes", {
                 method: "POST",
                 headers: {
@@ -78,7 +79,6 @@
         }
     }
 
-    // Evento del botón de reto morado
     botonReto.addEventListener("click", () => {
         const indiceAleatorio = Math.floor(Math.random() * bancoNotas.length);
         notaSecreta = bancoNotas[indiceAleatorio];
@@ -89,7 +89,6 @@
         reproducirTono(notaSecreta.frecuencia);
     });
 
-    // Eventos para los botones de respuesta del usuario
     botonesNotas.forEach(boton => {
         boton.addEventListener("click", () => {
             if (!notaSecreta) {
@@ -104,7 +103,11 @@
                 mensajeEstado.textContent = `🎉 ¡Correcto! Acertaste, era la nota ${notaSecreta.nombre}. (+10 pts)`;
                 mensajeEstado.className = "mensaje-exito";
 
-                // 🎯 Llamamos a nuestra función para reportar 10 puntos al backend
+                // 🌟 NUEVO: Incrementamos el puntaje local y actualizamos la interfaz visual
+                puntajeTotal += 10;
+                spanPuntajeTotal.textContent = puntajeTotal;
+
+                // Enviamos los 10 puntos al backend de Flask para que los guarde en SQLite
                 guardarPuntajeEnServidor(10);
 
             } else {
