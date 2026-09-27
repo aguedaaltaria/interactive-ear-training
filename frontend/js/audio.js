@@ -31,18 +31,48 @@
     const botonesNotas = document.querySelectorAll(".contenedor-botones .boton-nota");
     const botonReto = document.getElementById("boton-reto");
     const mensajeEstado = document.getElementById("mensaje-estado");
-    
-    // 🌟 NUEVO: Seleccionamos el span del marcador de puntaje
     const spanPuntajeTotal = document.querySelector("#marcador-puntaje span");
+    const listaHistorial = document.getElementById("lista-historial");
 
     const bancoNotas = [
         { nombre: "Do", frecuencia: 261.63 },
+        { nombre: "Re", frecuencia: 293.66 },
         { nombre: "Mi", frecuencia: 329.63 },
-        { nombre: "Sol", frecuencia: 392.00 }
+        { nombre: "Fa", frecuencia: 349.23 },
+        { nombre: "Sol", frecuencia: 392.00 },
+        { nombre: "La", frecuencia: 440.00 },
+        { nombre: "Si", frecuencia: 493.88 },
+        { nombre: "Do Alto", frecuencia: 523.25 }
     ];
 
     let notaSecreta = null;
-    let puntajeTotal = 0; // 🌟 NUEVO: Variable para llevar la cuenta en la sesión
+    let puntajeTotal = 0; 
+
+    async function cargarHistorial() {
+        try {
+            const respuesta = await fetch("http://localhost:5001/api/puntajes");
+            const resultado = await respuesta.json();
+            
+            listaHistorial.innerHTML = ""; // Limpiamos la lista
+
+            if (resultado.puntajes.length === 0) {
+                listaHistorial.innerHTML = "<li>No hay puntajes registrados aún.</li>";
+                return;
+            }
+
+            resultado.puntajes.forEach(item => {
+                const li = document.createElement("li");
+                li.innerHTML = `<span>Nivel: ${item.nivel}</span> <strong>+${item.puntaje} pts</strong> <small>${item.fecha}</small>`;
+                listaHistorial.appendChild(li);
+            });
+        } catch (error) {
+            console.error("Error al cargar el historial:", error);
+            listaHistorial.innerHTML = "<li>Error al conectar con el servidor.</li>";
+        }
+    }
+
+    // Cargamos el historial al abrir la página
+    cargarHistorial();
 
     function reproducirTono(frecuenciaHertzios) {
         const AudioContexto = window.AudioContext || window.webkitAudioContext;
@@ -74,6 +104,9 @@
 
             const resultado = await respuesta.json();
             console.log("Puntaje guardado en SQLite con éxito:", resultado);
+            
+            // Refrescamos el historial automáticamente al guardar un nuevo puntaje
+            cargarHistorial();
         } catch (error) {
             console.error("Error al conectar con el servidor Flask:", error);
         }
@@ -103,11 +136,9 @@
                 mensajeEstado.textContent = `🎉 ¡Correcto! Acertaste, era la nota ${notaSecreta.nombre}. (+10 pts)`;
                 mensajeEstado.className = "mensaje-exito";
 
-                // 🌟 NUEVO: Incrementamos el puntaje local y actualizamos la interfaz visual
                 puntajeTotal += 10;
                 spanPuntajeTotal.textContent = puntajeTotal;
 
-                // Enviamos los 10 puntos al backend de Flask para que los guarde en SQLite
                 guardarPuntajeEnServidor(10);
 
             } else {

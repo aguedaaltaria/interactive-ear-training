@@ -1,10 +1,32 @@
+:root {
+    --color-principal: #d97706;
+    --color-principal-hover: #b45309;
+    --color-reto: #0669d9;
+    --color-reto-hover: #0552b0;
+    --color-texto-oscuro: #333333;
+    --color-texto-suave: #666666;
+    --color-fondo-tarjeta: #ffffff;
+    --color-exito-bg: #d1fae5;
+    --color-exito-texto: #059669;
+    --color-error-bg: #fee2e2;
+    --color-error-texto: #dc2626;
+    --color-badge-bg: #fef3c7;
+    --color-badge-texto: #d97706;
+    --color-neutro-bg: #f3f4f6;
+    --color-neutro-texto: #4b5563;
+    --color-historial-bg: #f9fafb;
+    --color-borde: #e5e7eb;
+}
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    /* Cambiamos height fijo por min-height y padding para que respire por arriba y abajo */
+    min-height: 100vh;
+    padding: 2rem 0;
     margin: 0;
     
     /* Fondo SVG personalizado */
@@ -15,26 +37,26 @@ body {
 }
 
 .tarjeta-juego {
-    background: white;
-    padding: 2.5rem;
+    background: var(--color-fondo-tarjeta);
+    padding: 1.75rem 2rem;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     text-align: center;
-    max-width: 400px;
+    max-width: 440px;
     width: 90%;
 }
 
 h2 {
-    color: #333333;
+    color: var(--color-texto-oscuro);
     margin-top: 0;
 }
 
 p {
-    color: #666666;
+    color: var(--color-texto-suave);
 }
 
 button {
-    background-color: #d97706;
+    background-color: var(--color-principal);
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -42,20 +64,40 @@ button {
     font-weight: bold;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 1rem;
+    margin-top: 1.0rem;
     transition: background-color 0.2s ease;
     width: 100%;
 }
 
 button:hover {
-    background-color: #b45309;
+    background-color: var(--color-principal-hover);
 }
 
 .contenedor-botones {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+    margin-top: 1rem;
+    max-height: none; /* Quitamos cualquier límite de altura */
+    overflow-y: visible;
+}
+
+button.boton-nota {
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 0; /* Eliminamos el margen superior individual */
+    transition: background-color 0.2s ease;
+}
+
+button.boton-nota:hover {
+    background-color: var(--color-principal-hover);
 }
 
 #mensaje-estado {
@@ -67,36 +109,78 @@ button:hover {
 }
 
 .mensaje-neutro {
-    color: #4b5563;
-    background-color: #f3f4f6;
+    color: var(--color-neutro-texto);
+    background-color: var(--color-neutro-bg);
 }
 
 .mensaje-exito {
-    color: #059669;
-    background-color: #d1fae5;
+    color: var(--color-exito-texto);
+    background-color: var(--color-exito-bg);
 }
 
 .mensaje-error {
-    color: #dc2626;
-    background-color: #fee2e2;
+    color: var(--color-error-texto);
+    background-color: var(--color-error-bg);
 }
 
-#boton-reto {
-    background-color: #7c3aed;
+button#boton-reto {
+    background-color: var(--color-reto);
+    width: 100%;
+    padding: 0.65rem 1rem;
+    margin-top: 0.75rem;
     margin-bottom: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 #boton-reto:hover {
-    background-color: #6d28d9;
+    background-color: var(--color-reto-hover);
 }
 
 .puntaje-badge {
-    background-color: #fef3c7;
-    color: #d97706;
+    background-color: var(--color-badge-bg);
+    color: var(--color-badge-texto);
     font-weight: bold;
     padding: 0.5rem 1rem;
     border-radius: 9999px;
     display: inline-block;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
+}
+
+.seccion-historial {
+    margin-top: 1.5rem;
+    border-top: 2px solid var(--color-borde);
+    padding-top: 1rem;
+    text-align: left;
+}
+
+.seccion-historial h3 {
+    font-size: 1rem;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+#lista-historial {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 120px; /* Reducimos ligeramente la altura para que sea más compacto */
+    overflow-y: auto;
+}
+
+#lista-historial li {
+    background-color: var(--color-historial-bg);
+    border: 1px solid var(--color-borde);
+    padding: 0.5rem;
+    margin-bottom: 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-texto-suave);
 }
