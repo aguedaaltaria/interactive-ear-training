@@ -36,13 +36,17 @@
 
     const bancoNotas = [
         { nombre: "Do", frecuencia: 261.63 },
+        { nombre: "Do# / Reb", frecuencia: 277.18 },
         { nombre: "Re", frecuencia: 293.66 },
+        { nombre: "Re# / Mib", frecuencia: 311.13 },
         { nombre: "Mi", frecuencia: 329.63 },
         { nombre: "Fa", frecuencia: 349.23 },
+        { nombre: "Fa# / Solb", frecuencia: 369.99 },
         { nombre: "Sol", frecuencia: 392.00 },
+        { nombre: "Sol# / Lab", frecuencia: 415.30 },
         { nombre: "La", frecuencia: 440.00 },
-        { nombre: "Si", frecuencia: 493.88 },
-        { nombre: "Do Alto", frecuencia: 523.25 }
+        { nombre: "La# / Sib", frecuencia: 466.16 },
+        { nombre: "Si", frecuencia: 493.88 }
     ];
 
     let notaSecreta = null;
@@ -99,13 +103,15 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ puntaje: puntosGanados })
+                body: JSON.stringify({ 
+                    puntaje: puntosGanados, 
+                    nivel: "Notas Cromáticas" 
+                })
             });
 
             const resultado = await respuesta.json();
             console.log("Puntaje guardado en SQLite con éxito:", resultado);
             
-            // Refrescamos el historial automáticamente al guardar un nuevo puntaje
             cargarHistorial();
         } catch (error) {
             console.error("Error al conectar con el servidor Flask:", error);

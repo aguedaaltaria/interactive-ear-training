@@ -38,12 +38,12 @@ body {
 
 .tarjeta-juego {
     background: var(--color-fondo-tarjeta);
-    padding: 1.75rem 2rem;
+    padding: 1.5rem 1.75rem;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
     text-align: center;
-    max-width: 440px;
-    width: 90%;
+    max-width: 480px;
+    width: 92%;
 }
 
 h2 {
@@ -75,24 +75,24 @@ button:hover {
 
 .contenedor-botones {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.4rem;
-    margin-top: 1rem;
-    max-height: none; /* Quitamos cualquier límite de altura */
-    overflow-y: visible;
+    grid-template-columns: repeat(3, 1fr);
+    /* Definimos explícitamente el espacio vertical (filas) y horizontal (columnas) */
+    row-gap: 0rem;
+    column-gap: 0.45rem;
+    margin-top: 0.75rem;
 }
 
 button.boton-nota {
     background-color: var(--color-principal);
     color: white;
     border: none;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
+    /* Reducimos el padding superior/inferior a 0.3rem para que queden más compactos */
+    padding: 0.45rem;
+    font-size: 0.8rem;
     font-weight: bold;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     width: 100%;
-    margin-top: 0; /* Eliminamos el margen superior individual */
     transition: background-color 0.2s ease;
 }
 

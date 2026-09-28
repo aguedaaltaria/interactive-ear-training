@@ -57,21 +57,26 @@ def guardar_puntaje():
     return jsonify({'error': 'Falta el campo obligatorio (puntaje)'}), 400
 
   puntaje = int(datos_peticion['puntaje'])
-  nivel = datos_peticion.get('nivel', 'Entrenamiento Auditivo')
+  nivel = datos_peticion.get('nivel', 'Notas Cromáticas')
 
   conexion_base_datos = obtener_conexion()
   cursor = conexion_base_datos.cursor()
-  cursor.execute('INSERT INTO puntajes (nivel, puntaje) VALUES (?, ?)', (nivel, puntaje))
+  cursor.execute(
+      'INSERT INTO puntajes (nivel, puntaje) VALUES (?, ?)', (nivel, puntaje)
+  )
   conexion_base_datos.commit()
   nuevo_id = cursor.lastrowid
   conexion_base_datos.close()
 
-  return jsonify({
-      'mensaje': 'Puntaje guardado exitosamente',
-      'id': nuevo_id,
-      'nivel': nivel,
-      'puntaje': puntaje,
-  }), 201
+  return (
+      jsonify({
+          'mensaje': 'Puntaje guardado exitosamente',
+          'id': nuevo_id,
+          'nivel': nivel,
+          'puntaje': puntaje,
+      }),
+      201,
+  )
 
 
 if __name__ == '__main__':
