@@ -16,6 +16,16 @@
     --color-neutro-texto: #4b5563;
     --color-historial-bg: #f9fafb;
     --color-borde: #e5e7eb;
+    --color-secundario-bg: #e0f2fe;
+    --color-secundario-hover: #bae6fd;
+    --color-secundario-texto: #0369a1;
+    --color-intervalo-bg: #fef9c3;
+    --color-intervalo-hover: #fde047;
+    --color-intervalo-texto: #854d0e;
+    /* 🌟 Nuevas variables para el botón rojo de borrar/deseleccionar */
+    --color-peligro-bg: #dc2626;
+    --color-peligro-hover: #b91c1c;
+    --color-peligro-texto: #ffffff;
 }
 
 body {
@@ -44,6 +54,7 @@ body {
     text-align: center;
     max-width: 480px;
     width: 92%;
+    position: relative; /* 🌟 Crucial para posicionar el botón dentro */
 }
 
 h2 {
@@ -174,6 +185,245 @@ button#boton-reto {
 }
 
 #lista-historial li {
+    background-color: var(--color-historial-bg);
+    border: 1px solid var(--color-borde);
+    padding: 0.5rem;
+    margin-bottom: 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-texto-suave);
+}
+/* Utilidad para alternar vistas */
+.oculto {
+    display: none !important;
+}
+
+/* Estilos para el menú de niveles */
+.titulo-menu {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 0.5rem;
+}
+
+.subtitulo-menu {
+    font-size: 0.9rem;
+    color: var(--color-texto-suave);
+    margin-bottom: 1.25rem;
+}
+
+.contenedor-niveles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+button.boton-nivel {
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button.boton-nivel:hover {
+    background-color: var(--color-principal-hover);
+    transform: translateY(-1px);
+}
+
+button.boton-nivel.bloqueado {
+    background-color: var(--color-borde);
+    color: var(--color-texto-suave);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.badge-nivel {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+/* Botón de volver al menú flotante utilizando las variables del :root */
+.boton-secundario {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--color-secundario-bg);
+    color: var(--color-secundario-texto);
+    border: none;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    margin: 0;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.boton-secundario:hover {
+    background-color: var(--color-secundario-hover);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================
+   ESTILOS PARA EL NIVEL 2 - INTERVALOS SIMPLES
+   ========================================================== */
+
+/* Contenedor de 24 botones de nota (2 octavas) en cuadrícula compacta */
+.contenedor-botones-24 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas para que quepan ordenados */
+    row-gap: 0rem;
+    column-gap: 0.35rem;
+    margin-top: 0.75rem;
+    max-height: 220px; /* Evita cualquier desbordamiento vertical */
+}
+
+/* Botones individuales de nota para intervalos */
+button.boton-nota-intervalo {
+    background-color: var(--color-principal);
+    color: white;
+    border: none;
+    padding: 0.35rem 0.2rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+button.boton-nota-intervalo:hover {
+    background-color: var(--color-principal-hover);
+}
+
+/* Estado visual cuando una nota ha sido seleccionada como primera o segunda */
+button.boton-nota-intervalo.seleccionada {
+    background-color: var(--color-reto);
+    transform: scale(0.95);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Panel de opciones de respuestas de intervalos */
+#panel-opciones-intervalos {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: var(--color-historial-bg);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+}
+
+#panel-opciones-intervalos h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-texto-oscuro);
+    text-align: center;
+}
+
+/* Cuadrícula para los 12 botones de opciones de intervalos */
+.grid-intervalos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+}
+
+/* Botones de opción de intervalo */
+button.btn-opcion-intervalo {
+    background-color: #fef9c3; /* Amarillo pastel cálido */
+    color: #854d0e;            /* Texto marrón/dorado oscuro contrastante */
+    border: 1px solid #fde047;
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+button.btn-opcion-intervalo:hover {
+    background-color: var(--color-principal);
+    color: white;
+    border-color: var(--color-principal);
+}
+
+button.btn-opcion-intervalo {
+    background-color: var(--color-intervalo-bg);
+    color: var(--color-intervalo-texto);
+    border: 1px solid var(--color-intervalo-hover);
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+button.btn-opcion-intervalo:hover {
+    background-color: var(--color-principal);
+    color: white;
+    border-color: var(--color-principal);
+}
+/* Contenedor flexible para la barra de estado y el botón de borrar alineados */
+.contenedor-estado-accion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-neutro-bg);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+}
+
+.contenedor-estado-accion p {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+/* Botón rojo pequeño de borrar en la esquina derecha */
+.btn-borrar-pequeno {
+    background-color: var(--color-peligro-bg);
+    color: var(--color-peligro-texto);
+    border: none;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    margin: 0;
+    transition: background-color 0.2s ease;
+}
+
+.btn-borrar-pequeno:hover {
+    background-color: var(--color-peligro-hover);
+}
+
+/* Contenedor de la lista de historial unificado */
+#lista-historial, #lista-historial-intervalos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+/* Elementos de la lista (filas estilo tarjeta) unificados */
+#lista-historial li, #lista-historial-intervalos li {
     background-color: var(--color-historial-bg);
     border: 1px solid var(--color-borde);
     padding: 0.5rem;

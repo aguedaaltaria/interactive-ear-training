@@ -8,8 +8,30 @@
 </head>
 <body>
 
-    <div class="tarjeta-juego">
-        <h2>Entrenamiento Auditivo</h2>
+    <!-- 🌟 Vista 1: Menú de Niveles dentro de su propia tarjeta -->
+    <div id="menu-niveles" class="tarjeta-juego vista-menu">
+        <h2 class="titulo-menu">Selecciona un Nivel</h2>
+        <p class="subtitulo-menu">Elige el tipo de entrenamiento auditivo que deseas realizar:</p>
+        
+        <div class="contenedor-niveles">
+            <button class="boton-nivel" data-nivel="notas-cromaticas">
+                🎵 Notas Cromáticas <span class="badge-nivel">Nivel 1</span>
+            </button>
+            <button class="boton-nivel" data-nivel="intervalos-simples">
+                🎶 Intervalos Simples <span class="badge-nivel">Nivel 2</span>
+            </button>
+            <!-- Futuros niveles se agregarán aquí fácilmente -->
+            <button class="boton-nivel bloqueado" disabled>
+                🎸 Tríadas Básicas <span class="badge-nivel">Próximamente</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 🌟 Vista 2: El Juego dentro de su tarjeta, inicialmente oculta -->
+    <div id="vista-juego" class="tarjeta-juego vista-juego oculto">
+        <button id="btn-volver" class="boton-secundario">← Volver</button>
+        
+        <h2 style="margin-top: 1.5rem;">Entrenamiento Auditivo</h2>
         <p>Escucha la nota secreta e intenta adivinar cuál es:</p>
         
         <div id="marcador-puntaje" class="puntaje-badge">Puntaje Total: <span>0</span> pts</div>
@@ -36,6 +58,56 @@
         <div class="seccion-historial">
             <h3>Últimos Puntajes</h3>
             <ul id="lista-historial">
+                <li>Cargando historial...</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- 🌟 NUEVA VISTA: Nivel 2 - Intervalos Simples               -->
+    <!-- ========================================================== -->
+    <div id="vista-intervalos" class="tarjeta-juego vista-intervalos oculto">
+        <button id="btn-volver-intervalos" class="boton-secundario">← Volver</button>
+        
+        <h2 style="margin-top: 1.5rem;">Intervalos Simples</h2>
+        <p id="mensaje-instruccion-intervalo">Selecciona la primera nota del intervalo:</p>
+        
+        <div id="marcador-puntaje-intervalos" class="puntaje-badge">Puntaje Total: <span>0</span> pts</div>
+    
+        <button id="boton-reto-intervalo" style="background-color: var(--color-reto);">Escuchar Intervalo</button>
+        
+        <div class="contenedor-estado-accion">
+            <p id="mensaje-estado-intervalo" class="mensaje-neutro" style="margin:0; background:none; padding:0;">Haz clic en "Escuchar Intervalo" para comenzar.</p>
+            <button id="btn-deseleccionar" class="btn-borrar-pequeno oculto">🗑️ Borrar</button>
+        </div>
+
+        <!-- Cuadrícula para las 24 notas de 2 octavas (Se llenará dinámicamente o con 24 botones compactos) -->
+        <div class="contenedor-botones-24" id="grid-notas-intervalos">
+            <!-- Los 24 botones de las 2 octavas se generarán aquí o se colocarán organizados -->
+        </div>
+
+        <!-- Panel de opciones de intervalos (Aparece después de elegir las 2 notas) -->
+        <div id="panel-opciones-intervalos" class="oculto">
+            <h4>¿Qué intervalo es?</h4>
+            <div class="grid-intervalos">
+                <button class="btn-opcion-intervalo" data-intervalo="1">2da menor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="2">2da mayor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="3">3ra menor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="4">3ra mayor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="5">4ta justa</button>
+                <button class="btn-opcion-intervalo" data-intervalo="6">Tritono</button>
+                <button class="btn-opcion-intervalo" data-intervalo="7">5ta justa</button>
+                <button class="btn-opcion-intervalo" data-intervalo="8">6ta menor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="9">6ta mayor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="10">7ma menor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="11">7ma mayor</button>
+                <button class="btn-opcion-intervalo" data-intervalo="12">8va justa</button>
+            </div>
+        </div>
+
+        <div class="seccion-historial">
+            <h3>Últimos Puntajes Globales</h3>
+            <ul id="lista-historial-intervalos">
                 <li>Cargando historial...</li>
             </ul>
         </div>
