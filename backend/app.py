@@ -38,45 +38,75 @@ def health_check():
   return jsonify({'estado': 'activo', 'servicio': 'ear-training-api'}), 200
 
 
+@app.route('/api/usuarios', methods=['GET'])
+def listar_usuarios():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute('SELECT id, nombre FROM usuarios ORDER BY nombre ASC')
+    usuarios = [dict(fila) for fila in cursor.fetchall()]
+    conexion.close()
+    return jsonify({'usuarios': usuarios}), 200
+
+@app.route('/api/usuarios', methods=['POST'])
+def registrar_usuario():
+    datos = request.get_json()
+    if not datos or 'nombre' not in datos:
+        return jsonify({'error': 'Falta el nombre de usuario'}), 400
+    
+    nombre = datos['nombre'].strip().lower()
+    
+    if ' ' in nombre:
+        return jsonify({'error': 'El nombre de usuario no debe contener espacios'}), 400
+
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    try:
+        # Intentar insertar el nuevo usuario
+        cursor.execute('INSERT INTO usuarios (nombre) VALUES (?)', (nombre,))
+        conexion.commit()
+        usuario_id = cursor.lastrowid
+    except sqlite3.IntegrityError:
+        # Si ya existe, lo recuperamos
+        cursor.execute('SELECT id FROM usuarios WHERE nombre = ?', (nombre,))
+        usuario_id = cursor.fetchone()['id']
+    
+    conexion.close()
+    return jsonify({'mensaje': 'Usuario listo', 'usuario_id': usuario_id, 'nombre': nombre}), 200
+
 @app.route('/api/puntajes', methods=['GET'])
 def listar_puntajes():
-  conexion_base_datos = obtener_conexion()
-  cursor = conexion_base_datos.cursor()
-  cursor.execute('SELECT id, nivel, puntaje, fecha FROM puntajes ORDER BY fecha DESC LIMIT 20')
-  filas_recuperadas = cursor.fetchall()
-  conexion_base_datos.close()
-  puntajes = [dict(fila) for fila in filas_recuperadas]
-  return jsonify({'puntajes': puntajes}), 200
-
+    usuario_id = request.args.get('usuario_id')
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    if usuario_id:
+        cursor.execute('SELECT id, nivel, puntaje, fecha FROM puntajes WHERE usuario_id = ? ORDER BY fecha DESC LIMIT 20', (usuario_id,))
+    else:
+        cursor.execute('SELECT id, nivel, puntaje, fecha FROM puntajes ORDER BY fecha DESC LIMIT 20')
+        
+    filas = cursor.fetchall()
+    conexion.close()
+    return jsonify({'puntajes': [dict(f) for f in filas]}), 200
 
 @app.route('/api/puntajes', methods=['POST'])
 def guardar_puntaje():
-  datos_peticion = request.get_json()
+    datos = request.get_json()
+    if not datos or 'puntaje' not in datos or 'usuario_id' not in datos:
+        return jsonify({'error': 'Faltan campos obligatorios'}), 400
 
-  if not datos_peticion or 'puntaje' not in datos_peticion:
-    return jsonify({'error': 'Falta el campo obligatorio (puntaje)'}), 400
+    usuario_id = int(datos['usuario_id'])
+    puntaje = int(datos['puntaje'])
+    nivel = datos.get('nivel', 'Notas Cromáticas')
 
-  puntaje = int(datos_peticion['puntaje'])
-  nivel = datos_peticion.get('nivel', 'Notas Cromáticas')
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute('INSERT INTO puntajes (usuario_id, nivel, puntaje) VALUES (?, ?, ?)', (usuario_id, nivel, puntaje))
+    conexion.commit()
+    nuevo_id = cursor.lastrowid
+    conexion.close()
 
-  conexion_base_datos = obtener_conexion()
-  cursor = conexion_base_datos.cursor()
-  cursor.execute(
-      'INSERT INTO puntajes (nivel, puntaje) VALUES (?, ?)', (nivel, puntaje)
-  )
-  conexion_base_datos.commit()
-  nuevo_id = cursor.lastrowid
-  conexion_base_datos.close()
-
-  return (
-      jsonify({
-          'mensaje': 'Puntaje guardado exitosamente',
-          'id': nuevo_id,
-          'nivel': nivel,
-          'puntaje': puntaje,
-      }),
-      201,
-  )
+    return jsonify({'mensaje': 'Puntaje guardado', 'id': nuevo_id, 'nivel': nivel, 'puntaje': puntaje}), 201
 
 
 if __name__ == '__main__':

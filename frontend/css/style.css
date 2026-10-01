@@ -54,7 +54,8 @@ body {
     text-align: center;
     max-width: 480px;
     width: 92%;
-    position: relative; /* 🌟 Crucial para posicionar el botón dentro */
+    position: relative;
+    padding-top: 2.8rem;
 }
 
 h2 {
@@ -433,4 +434,78 @@ button.btn-opcion-intervalo:hover {
     display: flex;
     justify-content: space-between;
     color: var(--color-texto-suave);
+}
+
+/* Indicador del usuario activo en la esquina superior derecha */
+.badge-usuario-activo {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--color-texto-suave);
+    background: var(--color-neutro-bg);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid var(--color-borde);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    z-index: 10;
+}
+
+.badge-usuario-activo button {
+    background: none;
+    border: none;
+    color: var(--color-error-texto);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    font-weight: bold;
+}
+
+.badge-usuario-activo button:hover {
+    color: #b91c1c;
+    background: none;
+}
+
+/* Contenedor flotante de sugerencias de usuario */
+#sugerencias-usuarios {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--color-fondo-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.sugerencias-ocultas {
+    display: none;
+}
+
+/* Elemento individual de la sugerencia */
+.sugerencia-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-texto-oscuro);
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-neutro-bg);
+    transition: background-color 0.15s ease;
+}
+
+.sugerencia-item:hover {
+    background-color: var(--color-neutro-bg);
+    color: var(--color-principal);
+    font-weight: bold;
 }

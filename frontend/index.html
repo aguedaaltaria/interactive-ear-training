@@ -8,8 +8,33 @@
 </head>
 <body>
 
+    <!-- 🌟 Vista 0: Pantalla de Ingreso de Usuario -->
+    <div id="vista-usuario" class="tarjeta-juego">
+        <h2 class="titulo-menu">👤 Identificación de Usuario</h2>
+        <p class="subtitulo-menu">Ingresa tu nombre de usuario o selecciona uno existente:</p>
+        
+        <div class="contenedor-niveles">
+            <!-- Contenedor exclusivo para el input y las sugerencias -->
+            <div style="position: relative; width: 100%;">
+                <input type="text" id="input-usuario" placeholder="Ej: pepe123" autocomplete="off" style="padding: 0.75rem; font-size: 1rem; border: 1px solid var(--color-borde); border-radius: 6px; text-align: center; width: 100%; box-sizing: border-box;">
+                
+                <!-- Sugerencias flotantes justo debajo del input -->
+                <div id="sugerencias-usuarios" class="sugerencias-ocultas"></div>
+            </div>
+
+            <button id="btn-ingresar" class="boton-nivel" style="justify-content: center; margin-top: 0.75rem;">
+                🚀 Comenzar a Entrenar
+            </button>
+        </div>
+        <p id="mensaje-error-usuario" class="mensaje-error oculto" style="margin-top: 0.75rem; font-size: 0.85rem;"></p>
+    </div>
+
     <!-- 🌟 Vista 1: Menú de Niveles dentro de su propia tarjeta -->
-    <div id="menu-niveles" class="tarjeta-juego vista-menu">
+    <div id="menu-niveles" class="tarjeta-juego vista-menu oculto">
+        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
+            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        </div>
         <h2 class="titulo-menu">Selecciona un Nivel</h2>
         <p class="subtitulo-menu">Elige el tipo de entrenamiento auditivo que deseas realizar:</p>
         
@@ -28,7 +53,12 @@
     </div>
 
     <!-- 🌟 Vista 2: El Juego dentro de su tarjeta, inicialmente oculta -->
+     
     <div id="vista-juego" class="tarjeta-juego vista-juego oculto">
+        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
+            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        </div>
         <button id="btn-volver" class="boton-secundario">← Volver</button>
         
         <h2 style="margin-top: 1.5rem;">Entrenamiento Auditivo</h2>
@@ -67,6 +97,10 @@
     <!-- 🌟 NUEVA VISTA: Nivel 2 - Intervalos Simples               -->
     <!-- ========================================================== -->
     <div id="vista-intervalos" class="tarjeta-juego vista-intervalos oculto">
+        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
+            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        </div>
         <button id="btn-volver-intervalos" class="boton-secundario">← Volver</button>
         
         <h2 style="margin-top: 1.5rem;">Intervalos Simples</h2>

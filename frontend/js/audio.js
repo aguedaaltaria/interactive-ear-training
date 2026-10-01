@@ -29,11 +29,169 @@
 
    document.addEventListener("DOMContentLoaded", () => {
     // ------------------------------------------------------
-    // 1. SELECTORES DE VISTAS Y MENÚ PRINCIPAL
+    // 0. DECLARACIONES Y GESTIÓN DE USUARIO ACTIVO
     // ------------------------------------------------------
+    let usuarioActualId = localStorage.getItem("ear_training_usuario_id");
+    let usuarioActualNombre = localStorage.getItem("ear_training_usuario_nombre");
+
+    const vistaUsuario = document.getElementById("vista-usuario");
     const menuNiveles = document.getElementById("menu-niveles");
     const vistaJuego = document.getElementById("vista-juego");
-    const vistaIntervalos = document.getElementById("vista-intervalos"); 
+    const vistaIntervalos = document.getElementById("vista-intervalos");
+    const inputUsuario = document.getElementById("input-usuario");
+    const btnIngresar = document.getElementById("btn-ingresar");
+    const mensajeErrorUsuario = document.getElementById("mensaje-error-usuario");
+    
+    const indicadorUsuarioFlotante = document.getElementById("indicador-usuario-flotante");
+    const nombreUsuarioBadge = document.getElementById("nombre-usuario-badge");
+    const btnCambiarUsuario = document.getElementById("btn-cambiar-usuario");
+
+    // Si ya hay un usuario guardado al cargar la página
+    if (usuarioActualId && usuarioActualNombre) {
+        if (vistaUsuario) vistaUsuario.classList.add("oculto");
+        if (menuNiveles) menuNiveles.classList.remove("oculto");
+        mostrarBadgeUsuario(usuarioActualNombre);
+        cargarHistorial();
+    }
+
+    function mostrarBadgeUsuario(nombre) {
+        if (nombreUsuarioBadge && indicadorUsuarioFlotante) {
+            nombreUsuarioBadge.textContent = nombre;
+            indicadorUsuarioFlotante.classList.remove("oculto");
+        }
+    }
+
+    // Botón para cambiar de usuario
+    if (btnCambiarUsuario) {
+        btnCambiarUsuario.addEventListener("click", () => {
+            localStorage.removeItem("ear_training_usuario_id");
+            localStorage.removeItem("ear_training_usuario_nombre");
+            
+            if (vistaJuego) vistaJuego.classList.add("oculto");
+            if (vistaIntervalos) vistaIntervalos.classList.add("oculto");
+            if (menuNiveles) menuNiveles.classList.add("oculto");
+            if (indicadorUsuarioFlotante) indicadorUsuarioFlotante.classList.add("oculto");
+            
+            if (vistaUsuario) vistaUsuario.classList.remove("oculto");
+            if (inputUsuario) inputUsuario.value = "";
+        });
+    }
+
+    if (btnIngresar) {
+        btnIngresar.addEventListener("click", async () => {
+            const nombreIngresado = inputUsuario.value.trim().toLowerCase();
+
+            if (!nombreIngresado) {
+                mensajeErrorUsuario.textContent = "⚠️ Por favor ingresa un nombre de usuario.";
+                mensajeErrorUsuario.classList.remove("oculto");
+                return;
+            }
+
+            if (nombreIngresado.includes(" ")) {
+                mensajeErrorUsuario.textContent = "⚠️ El nombre de usuario no debe contener espacios.";
+                mensajeErrorUsuario.classList.remove("oculto");
+                return;
+            }
+
+            try {
+                const respuesta = await fetch("http://localhost:5001/api/usuarios", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nombre: nombreIngresado })
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    usuarioActualId = resultado.usuario_id;
+                    usuarioActualNombre = resultado.nombre;
+
+                    localStorage.setItem("ear_training_usuario_id", usuarioActualId);
+                    localStorage.setItem("ear_training_usuario_nombre", usuarioActualNombre);
+
+                    vistaUsuario.classList.add("oculto");
+                    menuNiveles.classList.remove("oculto");
+                    mostrarBadgeUsuario(usuarioActualNombre);
+
+                    cargarHistorial();
+                } else {
+                    mensajeErrorUsuario.textContent = `⚠️ ${resultado.error}`;
+                    mensajeErrorUsuario.classList.remove("oculto");
+                }
+            } catch (error) {
+                console.error("Error al registrar usuario:", error);
+                mensajeErrorUsuario.textContent = "⚠️ Error al conectar con el servidor.";
+                mensajeErrorUsuario.classList.remove("oculto");
+            }
+        });
+    }
+
+    // ------------------------------------------------------
+    // AUTOCOMPLETADO DE USUARIOS
+    // ------------------------------------------------------
+    const contenedorSugerencias = document.getElementById("sugerencias-usuarios");
+    let listaUsuariosGlobal = [];
+
+    // Función para obtener la lista de usuarios registrados del servidor
+    async function cargarUsuariosExistentes() {
+        try {
+            const respuesta = await fetch("http://localhost:5001/api/usuarios");
+            const resultado = await respuesta.json();
+            if (respuesta.ok) {
+                listaUsuariosGlobal = resultado.usuarios; // [{id, nombre}, ...]
+            }
+        } catch (error) {
+            console.error("Error al cargar usuarios:", error);
+        }
+    }
+
+    // Cargamos los usuarios al iniciar la vista
+    cargarUsuariosExistentes();
+
+    if (inputUsuario) {
+        inputUsuario.addEventListener("input", () => {
+            const textoEscrito = inputUsuario.value.trim().toLowerCase();
+            contenedorSugerencias.innerHTML = "";
+
+            if (textoEscrito.length === 0) {
+                contenedorSugerencias.style.display = "none";
+                return;
+            }
+
+            // Filtrar usuarios que comiencen con el texto escrito
+            const filtrados = listaUsuariosGlobal.filter(u => u.nombre.startsWith(textoEscrito));
+
+            if (filtrados.length > 0) {
+                contenedorSugerencias.style.display = "block";
+                filtrados.forEach(usuario => {
+                    const divItem = document.createElement("div");
+                    divItem.className = "sugerencia-item";
+                    divItem.textContent = usuario.nombre;
+                    
+                    // Al hacer clic en la sugerencia, se autocompleta el input y se oculta la lista
+                    divItem.addEventListener("click", () => {
+                        inputUsuario.value = usuario.nombre;
+                        contenedorSugerencias.style.display = "none";
+                    });
+
+                    contenedorSugerencias.appendChild(divItem);
+                });
+            } else {
+                contenedorSugerencias.style.display = "none";
+            }
+        });
+
+        // Ocultar sugerencias si se hace clic fuera del input
+        document.addEventListener("click", (e) => {
+            if (e.target !== inputUsuario && e.target !== contenedorSugerencias) {
+                contenedorSugerencias.style.display = "none";
+            }
+        });
+    }
+
+    // ------------------------------------------------------
+    // 1. SELECTORES DE VISTAS Y MENÚ PRINCIPAL
+    // ------------------------------------------------------
     const botonesSeleccionNivel = document.querySelectorAll(".boton-nivel:not(.bloqueado)");
     
     const botonVolverJuego = document.getElementById("btn-volver");
@@ -48,7 +206,6 @@
     const botonReto = document.getElementById("boton-reto");
     const mensajeEstado = document.getElementById("mensaje-estado");
     const spanPuntajeTotal = document.querySelector("#marcador-puntaje span");
-    const listaHistorial = document.getElementById("lista-historial");
 
     const bancoNotas = [
         { nombre: "Do", frecuencia: 261.63 },
@@ -123,7 +280,6 @@
     const mensajeEstadoIntervalo = document.getElementById("mensaje-estado-intervalo");
     const panelOpcionesIntervalos = document.getElementById("panel-opciones-intervalos");
     const spanPuntajeIntervalos = document.querySelector("#marcador-puntaje-intervalos span");
-    const listaHistorialIntervalos = document.getElementById("lista-historial-intervalos");
     const botonesOpcionIntervalo = document.querySelectorAll(".btn-opcion-intervalo");
     const btnDeseleccionar = document.getElementById("btn-deseleccionar");
 
@@ -183,7 +339,7 @@
         oscA2.stop(inicioAcorde + duracionNota + 0.3);
     }
 
-    // Botón para escuchar el intervalo (genera nuevo reto o repite el actual)
+    // Botón para escuchar el intervalo
     if (botonRetoIntervalo) {
         botonRetoIntervalo.addEventListener("click", () => {
             if (!notaSeleccionada1 || !notaSeleccionada2) {
@@ -207,13 +363,17 @@
         });
     }
 
-    // Selección de notas en la cuadrícula
+    // Selección de notas en la cuadrícula (Limitada estrictamente a 2 notas)
     document.addEventListener("click", (e) => {
         if (e.target.classList.contains("boton-nota-intervalo")) {
             if (!notaSeleccionada1 || !notaSeleccionada2) {
                 mensajeEstadoIntervalo.textContent = "⚠️ Primero haz clic en 'Escuchar Intervalo'.";
                 mensajeEstado.className = "mensaje-error";
                 return;
+            }
+
+            if (window.usuarioNota1 && window.usuarioNota2) {
+                return; 
             }
 
             const freqBoton = parseFloat(e.target.getAttribute("data-frecuencia"));
@@ -283,53 +443,31 @@
     // 4. FUNCIONES GLOBALES DE AUDIO Y BACKEND
     // ------------------------------------------------------
     async function cargarHistorial() {
+        if (!usuarioActualId) return;
         try {
-            const respuesta = await fetch("http://localhost:5001/api/puntajes");
+            const respuesta = await fetch(`http://localhost:5001/api/puntajes?usuario_id=${usuarioActualId}`);
             const resultado = await respuesta.json();
             
-            // Seleccionamos ambas listas por si acaso existen en el DOM
             const listaNivel1 = document.getElementById("lista-historial");
             const listaNivel2 = document.getElementById("lista-historial-intervalos");
             
             let contenidoHTML = "";
 
-            // Verificamos de forma clara si hay puntajes registrados
             if (resultado.puntajes.length === 0) {
-                contenidoHTML = "<li>No hay puntajes registrados aún.</li>";
+                contenidoHTML = "<li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>";
             } else {
-                // Construimos la lista paso a paso de forma muy legible
                 resultado.puntajes.forEach(item => {
                     contenidoHTML += `<li><span>Nivel: ${item.nivel}</span> <strong>+${item.puntaje} pts</strong> <small>${item.fecha}</small></li>`;
                 });
             }
 
-            // Actualizamos la interfaz para el Nivel 1 si existe
-            if (listaNivel1) {
-                listaNivel1.innerHTML = contenidoHTML;
-            }
-
-            // Actualizamos la interfaz para el Nivel 2 si existe
-            if (listaNivel2) {
-                listaNivel2.innerHTML = contenidoHTML;
-            }
+            if (listaNivel1) listaNivel1.innerHTML = contenidoHTML;
+            if (listaNivel2) listaNivel2.innerHTML = contenidoHTML;
 
         } catch (error) {
             console.error("Error al cargar el historial:", error);
-            const errorHTML = "<li>Error al conectar con el servidor.</li>";
-            
-            const listaNivel1 = document.getElementById("lista-historial");
-            if (listaNivel1) {
-                listaNivel1.innerHTML = errorHTML;
-            }
-
-            const listaNivel2 = document.getElementById("lista-historial-intervalos");
-            if (listaNivel2) {
-                listaNivel2.innerHTML = errorHTML;
-            }
         }
     }
-
-    cargarHistorial();
 
     function reproducirTono(frecuenciaHertzios) {
         const AudioContexto = window.AudioContext || window.webkitAudioContext;
@@ -350,17 +488,20 @@
     }
 
     async function guardarPuntajeEnServidor(puntosGanados) {
+        if (!usuarioActualId) return;
         try {
-            const respuesta = await fetch("http://localhost:5001/api/puntajes", {
+            await fetch("http://localhost:5001/api/puntajes", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ puntaje: puntosGanados, nivel: nivelActual })
+                body: JSON.stringify({ 
+                    usuario_id: usuarioActualId,
+                    puntaje: puntosGanados, 
+                    nivel: nivelActual 
+                })
             });
-            const resultado = await respuesta.json();
-            console.log("Puntaje guardado en SQLite con éxito:", resultado);
             cargarHistorial();
         } catch (error) {
-            console.error("Error al conectar con el servidor Flask:", error);
+            console.error("Error al guardar puntaje:", error);
         }
     }
 
