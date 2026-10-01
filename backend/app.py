@@ -98,16 +98,16 @@ def guardar_puntaje():
     usuario_id = int(datos['usuario_id'])
     puntaje = int(datos['puntaje'])
     nivel = datos.get('nivel', 'Notas Cromáticas')
+    resultado = datos.get('resultado', 'acierto')
 
     conexion = obtener_conexion()
     cursor = conexion.cursor()
-    cursor.execute('INSERT INTO puntajes (usuario_id, nivel, puntaje) VALUES (?, ?, ?)', (usuario_id, nivel, puntaje))
+    cursor.execute('INSERT INTO puntajes (usuario_id, nivel, puntaje, resultado) VALUES (?, ?, ?, ?)', (usuario_id, nivel, puntaje, resultado))
     conexion.commit()
     nuevo_id = cursor.lastrowid
     conexion.close()
 
-    return jsonify({'mensaje': 'Puntaje guardado', 'id': nuevo_id, 'nivel': nivel, 'puntaje': puntaje}), 201
-
+    return jsonify({'mensaje': 'Registro guardado', 'id': nuevo_id, 'nivel': nivel, 'puntaje': puntaje, 'resultado': resultado}), 201
 
 if __name__ == '__main__':
   # Como Flask corre en el puerto 5001, abrimos directamente esa dirección

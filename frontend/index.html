@@ -45,6 +45,9 @@
             <button class="boton-nivel" data-nivel="intervalos-simples">
                 🎶 Intervalos Simples <span class="badge-nivel">Nivel 2</span>
             </button>
+            <button class="boton-nivel" data-nivel="intervalos-compuestos">
+                🎵 Intervalos Compuestos <span class="badge-nivel">Nivel 3</span>
+            </button>
             <!-- Futuros niveles se agregarán aquí fácilmente -->
             <button class="boton-nivel bloqueado" disabled>
                 🎸 Tríadas Básicas <span class="badge-nivel">Próximamente</span>
@@ -143,6 +146,64 @@
             <h3>Últimos Puntajes Globales</h3>
             <ul id="lista-historial-intervalos">
                 <li>Cargando historial...</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Vista para el Nivel 3 -->
+    <div id="vista-intervalos-compuestos" class="tarjeta-juego oculto">
+        <div id="indicador-usuario-flotante-compuestos" class="badge-usuario-activo">
+            <span>👤 <strong id="nombre-usuario-badge-compuestos"></strong></span>
+            <button id="btn-cambiar-usuario-compuestos" title="Cambiar de usuario">Cambiar</button>
+        </div>
+        
+        <div style="text-align: left;">
+            <button id="btn-volver-compuestos" class="boton-volver">← Volver al Menú</button>
+        </div>
+    
+        <h2 class="titulo-menu">Intervalos Compuestos (Nivel 3)</h2>
+        <p class="subtitulo-menu">Distancias mayores a una octava (13 a 24 semitonos).</p>
+    
+        <div style="text-align: center;">
+            <div id="marcador-puntaje-compuestos" class="marcador">Puntaje Total: <span>0</span> pts</div>
+        </div>
+    
+        <div style="margin-bottom: 0.75rem;">
+            <button id="boton-reto-compuestos" class="btn-reto-principal">
+                🔊 Escuchar Intervalo Compuesto
+            </button>
+        </div>
+    
+        <div id="panel-seleccion-compuestos" class="panel-seleccion">
+            <span id="mensaje-estado-compuestos">Haz clic en 'Escuchar Intervalo Compuesto' para comenzar.</span>
+            <button id="btn-deseleccionar-compuestos" class="boton-borrar oculto">🗑️ Borrar</button>
+        </div>
+    
+        <!-- Cuadrícula compacta de 24 notas -->
+        <div id="grid-notas-compuestos" class="contenedor-botones-intervalos"></div>
+    
+        <!-- Panel de Opciones de Intervalos Compuestos (12 opciones completas) -->
+        <div id="panel-opciones-compuestos" class="contenedor-opciones-intervalos oculto">
+            <p class="subtitulo-menu" style="margin-bottom: 0.5rem;">¿Qué intervalo compuesto es?</p>
+            <div class="grid-opciones" style="grid-template-columns: repeat(3, 1fr);">
+                <button class="btn-opcion-compuesto" data-intervalo="13">9na menor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="14">9na mayor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="15">10ma menor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="16">10ma mayor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="17">11na justa</button>
+                <button class="btn-opcion-compuesto" data-intervalo="18">11na aumentada</button>
+                <button class="btn-opcion-compuesto" data-intervalo="19">12ma justa</button>
+                <button class="btn-opcion-compuesto" data-intervalo="20">13ra menor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="21">13ra mayor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="22">14ta menor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="23">14ta mayor</button>
+                <button class="btn-opcion-compuesto" data-intervalo="24">Doble Octava (15ta)</button>
+            </div>
+        </div>
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--color-borde); padding-top: 1rem;">
+            <h3 style="font-size: 0.95rem; color: var(--color-texto-oscuro); margin-bottom: 0.5rem;">Últimos Puntajes Globales</h3>
+            <ul id="lista-historial-compuestos" class="lista-historial" style="list-style: none; padding: 0; margin: 0;">
+                <li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>
             </ul>
         </div>
     </div>

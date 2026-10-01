@@ -508,4 +508,187 @@ button.btn-opcion-intervalo:hover {
     background-color: var(--color-neutro-bg);
     color: var(--color-principal);
     font-weight: bold;
+}/* Botón Volver secundario y limpio */
+.boton-volver {
+    background: none;
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto-suave);
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+    display: inline-block;
+    transition: all 0.2s ease;
+    width: auto;
+}
+
+.boton-volver:hover {
+    background-color: var(--color-neutro-bg);
+    color: var(--color-principal);
+}
+
+/* Cuadrícula compacta de 24 notas para Nivel 2 y Nivel 3 */
+.contenedor-botones-intervalos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.45rem;
+    margin: 0.8rem 0;
+    width: 100%;
+}
+
+/* Estilo unificado para los botones de notas de 24 casillas */
+.boton-nota-intervalo,
+.boton-nota-compuesto {
+    background-color: var(--color-principal);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.55rem 0.25rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.boton-nota-intervalo:hover,
+.boton-nota-compuesto:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+/* Estado seleccionado de las notas */
+.boton-nota-intervalo.seleccionada,
+.boton-nota-compuesto.seleccionada {
+    background-color: #0284c7 !important; /* Azul selección */
+    box-shadow: 0 0 0 2px #38bdf8;
+}
+
+/* Píldora de puntaje centrada */
+.marcador {
+    display: inline-block;
+    background-color: #fef3c7;
+    color: #b45309;
+    font-weight: bold;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin: 0.5rem auto 1rem auto;
+    border: 1px solid #fde68a;
+    text-align: center;
+}
+
+/* Botón principal de reto en azul */
+.btn-reto-principal {
+    background-color: #0284c7;
+    color: #ffffff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.2s ease;
+}
+
+.btn-reto-principal:hover {
+    background-color: #0369a1;
+}
+
+/* Panel de selección intermedia y botón de borrado */
+.panel-seleccion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8fafc;
+    border: 1px solid var(--color-borde);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin: 0.75rem 0;
+    font-size: 0.85rem;
+}
+
+.boton-borrar {
+    background-color: #dc2626;
+    color: #ffffff;
+    border: none;
+    padding: 0.3rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    width: auto;
+}
+
+.boton-borrar:hover {
+    background-color: #b91c1c;
+}
+
+/* Grid de opciones de intervalos (3 columnas) */
+.contenedor-opciones-intervalos {
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--color-borde);
+}
+
+.grid-opciones {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    margin-top: 0.5rem;
+}
+
+.btn-opcion-intervalo,
+.btn-opcion-compuesto {
+    background-color: #fef9c3;
+    color: #854d0e;
+    border: 1px solid #fef08a;
+    border-radius: 6px;
+    padding: 0.55rem 0.35rem;
+    font-size: 0.82rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-opcion-intervalo:hover,
+.btn-opcion-compuesto:hover {
+    background-color: #fef08a;
+    transform: translateY(-1px);
+}
+
+/* Estilo unificado para las listas de historial en todas las vistas */
+.lista-historial {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: data;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.lista-historial li {
+    background-color: var(--color-neutro-bg);
+    border: 1px solid var(--color-borde);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-texto-oscuro);
+}
+
+.lista-historial li small {
+    color: var(--color-texto-suave);
+    font-size: 0.75rem;
 }

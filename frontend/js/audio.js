@@ -46,6 +46,9 @@
     const nombreUsuarioBadge = document.getElementById("nombre-usuario-badge");
     const btnCambiarUsuario = document.getElementById("btn-cambiar-usuario");
 
+    const vistaCompuestos = document.getElementById("vista-intervalos-compuestos");
+    const botonVolverCompuestos = document.getElementById("btn-volver-compuestos");
+
     // Si ya hay un usuario guardado al cargar la página
     if (usuarioActualId && usuarioActualNombre) {
         if (vistaUsuario) vistaUsuario.classList.add("oculto");
@@ -58,6 +61,12 @@
         if (nombreUsuarioBadge && indicadorUsuarioFlotante) {
             nombreUsuarioBadge.textContent = nombre;
             indicadorUsuarioFlotante.classList.remove("oculto");
+        }
+        const badgeCompuestos = document.getElementById("nombre-usuario-badge-compuestos");
+        const indicadorCompuestos = document.getElementById("indicador-usuario-flotante-compuestos");
+        if (badgeCompuestos && indicadorCompuestos) {
+            badgeCompuestos.textContent = nombre;
+            indicadorCompuestos.classList.remove("oculto");
         }
     }
 
@@ -450,6 +459,7 @@
             
             const listaNivel1 = document.getElementById("lista-historial");
             const listaNivel2 = document.getElementById("lista-historial-intervalos");
+            const listaNivel3 = document.getElementById("lista-historial-compuestos");
             
             let contenidoHTML = "";
 
@@ -457,12 +467,14 @@
                 contenidoHTML = "<li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>";
             } else {
                 resultado.puntajes.forEach(item => {
-                    contenidoHTML += `<li><span>Nivel: ${item.nivel}</span> <strong>+${item.puntaje} pts</strong> <small>${item.fecha}</small></li>`;
+                    const iconoEstado = item.resultado === 'fallo' ? '❌' : '✅';
+                    contenidoHTML += `<li><span>${iconoEstado} Nivel: ${item.nivel}</span> <strong>+${item.puntaje} pts</strong> <small>${item.fecha}</small></li>`;
                 });
             }
 
             if (listaNivel1) listaNivel1.innerHTML = contenidoHTML;
             if (listaNivel2) listaNivel2.innerHTML = contenidoHTML;
+            if (listaNivel3) listaNivel3.innerHTML = contenidoHTML;
 
         } catch (error) {
             console.error("Error al cargar el historial:", error);
@@ -505,7 +517,7 @@
         }
     }
 
-    // ------------------------------------------------------
+ // ------------------------------------------------------
     // 5. NAVEGACIÓN ENTRE MENÚ Y NIVELES
     // ------------------------------------------------------
     botonesSeleccionNivel.forEach(boton => {
@@ -523,20 +535,18 @@
             } else if (tipoNivel === "intervalos-simples") {
                 nivelActual = "Intervalos Simples";
                 vistaIntervalos.classList.remove("oculto");
+            } else if (tipoNivel === "intervalos-compuestos") {
+                nivelActual = "Intervalos Compuestos";
+                vistaCompuestos.classList.remove("oculto");
+                mensajeEstadoCompuestos.textContent = "Haz clic en 'Escuchar Intervalo Compuesto' para comenzar.";
+                mensajeEstadoCompuestos.className = "mensaje-neutro";
             }
         });
     });
 
-    if (botonVolverJuego) {
-        botonVolverJuego.addEventListener("click", () => {
-            vistaJuego.classList.add("oculto");
-            menuNiveles.classList.remove("oculto");
-        });
-    }
-
-    if (botonVolverIntervalos) {
-        botonVolverIntervalos.addEventListener("click", () => {
-            vistaIntervalos.classList.add("oculto");
+    if (botonVolverCompuestos) {
+        botonVolverCompuestos.addEventListener("click", () => {
+            vistaCompuestos.classList.add("oculto");
             menuNiveles.classList.remove("oculto");
         });
     }
@@ -580,4 +590,139 @@
             }
         });
     });
+    // ------------------------------------------------------
+    // 7. LÓGICA DEL NIVEL 3: INTERVALOS COMPUESTOS (> 12 semitones)
+    // ------------------------------------------------------
+    const gridNotasCompuestos = document.getElementById("grid-notas-compuestos");
+    const botonRetoCompuestos = document.getElementById("boton-reto-compuestos");
+    const mensajeEstadoCompuestos = document.getElementById("mensaje-estado-compuestos");
+    const panelOpcionesCompuestos = document.getElementById("panel-opciones-compuestos");
+    const spanPuntajeCompuestos = document.querySelector("#marcador-puntaje-compuestos span");
+    const btnDeseleccionarCompuestos = document.getElementById("btn-deseleccionar-compuestos");
+    const botonesOpcionCompuesto = document.querySelectorAll(".btn-opcion-compuesto");
+
+    let notaCompuesta1 = null;
+    let notaCompuesta2 = null;
+    let puntajeCompuestosTotal = 0;
+
+    function inicializarBotonesCompuestos() {
+        if (!gridNotasCompuestos) return;
+        gridNotasCompuestos.innerHTML = "";
+        bancoNotas24.forEach((nota, index) => {
+            const boton = document.createElement("button");
+            boton.className = "boton-nota-compuesto";
+            boton.textContent = nota.nombre;
+            boton.setAttribute("data-index", index);
+            boton.setAttribute("data-frecuencia", nota.frecuencia);
+            gridNotasCompuestos.appendChild(boton);
+        });
+    }
+
+    inicializarBotonesCompuestos();
+
+    if (botonRetoCompuestos) {
+        botonRetoCompuestos.addEventListener("click", () => {
+            // Generar intervalo compuesto (distancia entre 13 y 24 semitones)
+            const index1 = Math.floor(Math.random() * 10); // Notas más graves para permitir el salto
+            const semitonosCompuestos = Math.floor(Math.random() * 12) + 13; // Entre 13 y 24
+            let index2 = index1 + semitonosCompuestos;
+            if (index2 >= bancoNotas24.length) index2 = bancoNotas24.length - 1;
+
+            notaCompuesta1 = bancoNotas24[index1];
+            notaCompuesta2 = bancoNotas24[index2];
+
+            mensajeEstadoCompuestos.textContent = "🔊 Reproduciendo intervalo compuesto... Selecciona las dos notas.";
+            mensajeEstadoCompuestos.className = "mensaje-neutro";
+
+            reproducirSecuenciaIntervalo(notaCompuesta1.frecuencia, notaCompuesta2.frecuencia);
+        });
+    }
+
+    // Selección en cuadrícula de Nivel 3
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("boton-nota-compuesto")) {
+            if (!notaCompuesta1 || !notaCompuesta2) {
+                mensajeEstadoCompuestos.textContent = "⚠️ Primero haz clic en 'Escuchar Intervalo Compuesto'.";
+                return;
+            }
+
+            if (window.compuestoNota1 && window.compuestoNota2) return;
+
+            const freqBoton = parseFloat(e.target.getAttribute("data-frecuencia"));
+            const nombreBoton = e.target.textContent;
+
+            reproducirTono(freqBoton);
+            e.target.classList.add("seleccionada");
+
+            if (!window.compuestoNota1) {
+                window.compuestoNota1 = { nombre: nombreBoton, frecuencia: freqBoton };
+                mensajeEstadoCompuestos.textContent = `Nota 1: ${nombreBoton}. Selecciona la segunda nota.`;
+                btnDeseleccionarCompuestos.classList.remove("oculto");
+            } else if (!window.compuestoNota2 && window.compuestoNota1.nombre !== nombreBoton) {
+                window.compuestaNota2 = { nombre: nombreBoton, frecuencia: freqBoton };
+                mensajeEstadoCompuestos.textContent = `Seleccionaste: ${window.compuestoNota1.nombre} y ${window.compuestaNota2.nombre}. ¿Qué intervalo es?`;
+                panelOpcionesCompuestos.classList.remove("oculto");
+            }
+        }
+    });
+
+    if (btnDeseleccionarCompuestos) {
+        btnDeseleccionarCompuestos.addEventListener("click", () => {
+            window.compuestoNota1 = null;
+            window.compuestaNota2 = null;
+            document.querySelectorAll(".boton-nota-compuesto").forEach(b => b.classList.remove("seleccionada"));
+            panelOpcionesCompuestos.classList.add("oculto");
+            btnDeseleccionarCompuestos.classList.add("oculto");
+            mensajeEstadoCompuestos.textContent = "Selección borrada. Vuelve a elegir las dos notas.";
+        });
+    }
+
+    botonesOpcionCompuesto.forEach(btnOpcion => {
+        btnOpcion.addEventListener("click", async () => {
+            const semitonosElegidos = parseInt(btnOpcion.getAttribute("data-intervalo"));
+            const idx1 = bancoNotas24.findIndex(n => n.frecuencia === notaCompuesta1.frecuencia);
+            const idx2 = bancoNotas24.findIndex(n => n.frecuencia === window.compuestaNota2.frecuencia);
+            const semitonosReales = Math.abs(idx1 - idx2);
+
+            if (semitonosElegidos === semitonosReales) {
+                mensajeEstadoCompuestos.textContent = `🎉 ¡Correcto! Es un intervalo compuesto exacto. (+20 pts)`;
+                mensajeEstadoCompuestos.className = "mensaje-exito";
+                puntajeCompuestosTotal += 20;
+                spanPuntajeCompuestos.textContent = puntajeCompuestosTotal;
+                await guardarPuntajeConResultado(20, 'acierto');
+            } else {
+                mensajeEstadoCompuestos.textContent = `❌ Fallaste. Era otro intervalo compuesto. (0 pts)`;
+                mensajeEstadoCompuestos.className = "mensaje-error";
+                // Ya no restamos puntos, solo registramos el fallo
+                await guardarPuntajeConResultado(0, 'fallo');
+            }
+
+            notaCompuesta1 = null;
+            notaCompuesta2 = null;
+            window.compuestoNota1 = null;
+            window.compuestaNota2 = null;
+            document.querySelectorAll(".boton-nota-compuesto").forEach(b => b.classList.remove("seleccionada"));
+            panelOpcionesCompuestos.classList.add("oculto");
+            btnDeseleccionarCompuestos.classList.add("oculto");
+        });
+    });
+
+    async function guardarPuntajeConResultado(puntos, resultado) {
+        if (!usuarioActualId) return;
+        try {
+            await fetch("http://localhost:5001/api/puntajes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    usuario_id: usuarioActualId,
+                    puntaje: puntos, 
+                    nivel: nivelActual,
+                    resultado: resultado 
+                })
+            });
+            cargarHistorial();
+        } catch (error) {
+            console.error("Error al registrar puntaje y resultado:", error);
+        }
+    }
 });
