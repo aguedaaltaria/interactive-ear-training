@@ -1,0 +1,145 @@
+#mensaje-estado, #mensaje-estado-intervalo, #mensaje-estado-compuestos, #mensaje-estado-triadas {
+    font-weight: bold;
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.mensaje-neutro {
+    color: var(--color-neutro-texto);
+    background-color: var(--color-neutro-bg);
+}
+
+.mensaje-exito {
+    color: var(--color-exito-texto);
+    background-color: var(--color-exito-bg);
+}
+
+.mensaje-error {
+    color: var(--color-error-texto);
+    background-color: var(--color-error-bg);
+}
+
+.seccion-historial {
+    margin-top: 1.5rem;
+    border-top: 2px solid var(--color-borde);
+    padding-top: 1rem;
+    text-align: left;
+}
+
+.seccion-historial h3 {
+    font-size: 1rem;
+    color: var(--color-texto-oscuro);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.lista-historial, #lista-historial, #lista-historial-intervalos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.lista-historial li, #lista-historial li, #lista-historial-intervalos li {
+    background-color: var(--color-neutro-bg);
+    border: 1px solid var(--color-borde);
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--color-texto-oscuro);
+}
+
+.lista-historial li small, #lista-historial li small {
+    color: var(--color-texto-suave);
+    font-size: 0.75rem;
+}
+
+#panel-opciones-intervalos, .contenedor-opciones-intervalos {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: var(--color-historial-bg);
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+}
+
+#panel-opciones-intervalos h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--color-texto-oscuro);
+    text-align: center;
+}
+
+.contenedor-estado-accion, .panel-seleccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-neutro-bg);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    font-size: 0.85rem;
+}
+
+.btn-borrar-pequeno, .boton-borrar {
+    background-color: var(--color-peligro-bg);
+    color: var(--color-peligro-texto);
+    border: none;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    width: auto;
+    margin: 0;
+    transition: background-color 0.2s ease;
+}
+
+.btn-borrar-pequeno:hover, .boton-borrar:hover {
+    background-color: var(--color-peligro-hover);
+}
+
+#sugerencias-usuarios {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: var(--color-fondo-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.sugerencias-ocultas {
+    display: none;
+}
+
+.sugerencia-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    color: var(--color-texto-oscuro);
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-neutro-bg);
+    transition: background-color 0.15s ease;
+}
+
+.sugerencia-item:hover {
+    background-color: var(--color-neutro-bg);
+    color: var(--color-principal);
+    font-weight: bold;
+}

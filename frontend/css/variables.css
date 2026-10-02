@@ -1,0 +1,45 @@
+:root {
+    /* Colores Principales y de Retos */
+    --color-principal: #d97706;
+    --color-principal-hover: #b45309;
+    --color-reto: #0669d9;
+    --color-reto-hover: #0552b0;
+
+    /* Textos */
+    --color-texto-oscuro: #333333;
+    --color-texto-suave: #666666;
+
+    /* Fondos y Superficies (Blancos y Neutros) */
+    --color-fondo-tarjeta: #ffffff;
+    --color-blanco: #ffffff;
+    --color-neutro-bg: #f3f4f6;
+    --color-neutro-texto: #4b5563;
+    --color-historial-bg: #f9fafb;
+    --color-borde: #e5e7eb;
+
+    /* Estados: Éxito y Error (Rojos y Verdes) */
+    --color-exito-bg: #d1fae5;
+    --color-exito-texto: #059669;
+    --color-error-bg: #fee2e2;
+    --color-error-texto: #dc2626;
+    --color-peligro-bg: #dc2626;
+    --color-peligro-hover: #b91c1c;
+    --color-peligro-texto: #ffffff;
+
+    /* Insignias (Badges) y Selecciones (Azules) */
+    --color-badge-bg: #fef3c7;
+    --color-badge-texto: #d97706;
+    --color-secundario-bg: #e0f2fe;
+    --color-secundario-hover: #bae6fd;
+    --color-secundario-texto: #0369a1;
+    --color-seleccion: #0284c7;
+    --color-seleccion-sombra: #38bdf8;
+    --color-volver-bg: #e3f2fd;
+    --color-volver-texto: #1976d2;
+    --color-volver-hover: #bbdefb;
+
+    /* Intervalos y Cualidades (Amarillos pasteles) */
+    --color-intervalo-bg: #fef9c3;
+    --color-intervalo-hover: #fde047;
+    --color-intervalo-texto: #854d0e;
+}

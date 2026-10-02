@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrenador Auditivo Interactivo</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
 
@@ -14,11 +17,8 @@
         <p class="subtitulo-menu">Ingresa tu nombre de usuario o selecciona uno existente:</p>
         
         <div class="contenedor-niveles">
-            <!-- Contenedor exclusivo para el input y las sugerencias -->
             <div style="position: relative; width: 100%;">
                 <input type="text" id="input-usuario" placeholder="Ej: pepe123" autocomplete="off" style="padding: 0.75rem; font-size: 1rem; border: 1px solid var(--color-borde); border-radius: 6px; text-align: center; width: 100%; box-sizing: border-box;">
-                
-                <!-- Sugerencias flotantes justo debajo del input -->
                 <div id="sugerencias-usuarios" class="sugerencias-ocultas"></div>
             </div>
 
@@ -29,7 +29,7 @@
         <p id="mensaje-error-usuario" class="mensaje-error oculto" style="margin-top: 0.75rem; font-size: 0.85rem;"></p>
     </div>
 
-    <!-- 🌟 Vista 1: Menú de Niveles dentro de su propia tarjeta -->
+    <!-- 🌟 Vista 1: Menú de Niveles -->
     <div id="menu-niveles" class="tarjeta-juego vista-menu oculto">
         <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
             <span>👤 <strong id="nombre-usuario-badge"></strong></span>
@@ -48,21 +48,19 @@
             <button class="boton-nivel" data-nivel="intervalos-compuestos">
                 🎵 Intervalos Compuestos <span class="badge-nivel">Nivel 3</span>
             </button>
-            <!-- Futuros niveles se agregarán aquí fácilmente -->
-            <button class="boton-nivel bloqueado" disabled>
-                🎸 Tríadas Básicas <span class="badge-nivel">Próximamente</span>
+            <button class="boton-nivel" data-nivel="triadas-simples">
+                🎹 Tríadas Simples e Inversiones <span class="badge-nivel">Nivel 4</span>
             </button>
         </div>
     </div>
 
-    <!-- 🌟 Vista 2: El Juego dentro de su tarjeta, inicialmente oculta -->
-     
+    <!-- 🌟 Vista 2: Nivel 1 - Notas Cromáticas -->
     <div id="vista-juego" class="tarjeta-juego vista-juego oculto">
-        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
-            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
-            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        <div id="indicador-usuario-flotante-nivel1" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge-nivel1"></strong></span>
+            <button id="btn-cambiar-usuario-nivel1" title="Cambiar de usuario">Cambiar</button>
         </div>
-        <button id="btn-volver" class="boton-secundario">← Volver</button>
+        <button id="btn-volver" class="btn-volver">← Volver</button>
         
         <h2 style="margin-top: 1.5rem;">Entrenamiento Auditivo</h2>
         <p>Escucha la nota secreta e intenta adivinar cuál es:</p>
@@ -96,15 +94,13 @@
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- 🌟 NUEVA VISTA: Nivel 2 - Intervalos Simples               -->
-    <!-- ========================================================== -->
+    <!-- 🌟 Vista 3: Nivel 2 - Intervalos Simples -->
     <div id="vista-intervalos" class="tarjeta-juego vista-intervalos oculto">
-        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
-            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
-            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        <div id="indicador-usuario-flotante-intervalos" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge-intervalos"></strong></span>
+            <button id="btn-cambiar-usuario-intervalos" title="Cambiar de usuario">Cambiar</button>
         </div>
-        <button id="btn-volver-intervalos" class="boton-secundario">← Volver</button>
+        <button id="btn-volver-intervalos" class="btn-volver">← Volver</button>
         
         <h2 style="margin-top: 1.5rem;">Intervalos Simples</h2>
         <p id="mensaje-instruccion-intervalo">Selecciona la primera nota del intervalo:</p>
@@ -118,12 +114,8 @@
             <button id="btn-deseleccionar" class="btn-borrar-pequeno oculto">🗑️ Borrar</button>
         </div>
 
-        <!-- Cuadrícula para las 24 notas de 2 octavas (Se llenará dinámicamente o con 24 botones compactos) -->
-        <div class="contenedor-botones-24" id="grid-notas-intervalos">
-            <!-- Los 24 botones de las 2 octavas se generarán aquí o se colocarán organizados -->
-        </div>
+        <div class="contenedor-botones-24" id="grid-notas-intervalos"></div>
 
-        <!-- Panel de opciones de intervalos (Aparece después de elegir las 2 notas) -->
         <div id="panel-opciones-intervalos" class="oculto">
             <h4>¿Qué intervalo es?</h4>
             <div class="grid-intervalos">
@@ -150,18 +142,16 @@
         </div>
     </div>
 
-    <!-- Vista para el Nivel 3 -->
+    <!-- 🌟 Vista 4: Nivel 3 - Intervalos Compuestos -->
     <div id="vista-intervalos-compuestos" class="tarjeta-juego oculto">
         <div id="indicador-usuario-flotante-compuestos" class="badge-usuario-activo">
             <span>👤 <strong id="nombre-usuario-badge-compuestos"></strong></span>
             <button id="btn-cambiar-usuario-compuestos" title="Cambiar de usuario">Cambiar</button>
         </div>
         
-        <div style="text-align: left;">
-            <button id="btn-volver-compuestos" class="boton-volver">← Volver al Menú</button>
-        </div>
-    
-        <h2 class="titulo-menu">Intervalos Compuestos (Nivel 3)</h2>
+        <button id="btn-volver-compuestos" class="btn-volver">← Volver</button>
+        <h2>Intervalos Compuestos (Nivel 3)</h2>
+
         <p class="subtitulo-menu">Distancias mayores a una octava (13 a 24 semitonos).</p>
     
         <div style="text-align: center;">
@@ -179,10 +169,8 @@
             <button id="btn-deseleccionar-compuestos" class="boton-borrar oculto">🗑️ Borrar</button>
         </div>
     
-        <!-- Cuadrícula compacta de 24 notas -->
         <div id="grid-notas-compuestos" class="contenedor-botones-intervalos"></div>
     
-        <!-- Panel de Opciones de Intervalos Compuestos (12 opciones completas) -->
         <div id="panel-opciones-compuestos" class="contenedor-opciones-intervalos oculto">
             <p class="subtitulo-menu" style="margin-bottom: 0.5rem;">¿Qué intervalo compuesto es?</p>
             <div class="grid-opciones" style="grid-template-columns: repeat(3, 1fr);">
@@ -208,6 +196,56 @@
         </div>
     </div>
 
-    <script src="js/audio.js"></script>
+    <!-- 🌟 Vista 5: Nivel 4 - Tríadas Simples -->
+    <div id="vista-triadas" class="tarjeta-juego oculto">
+        <div id="indicador-usuario-flotante-triadas" class="badge-usuario-activo">
+            <span>👤 <strong id="nombre-usuario-badge-triadas"></strong></span>
+            <button id="btn-cambiar-usuario-triadas" title="Cambiar de usuario">Cambiar</button>
+        </div>
+
+        <button id="btn-volver-triadas" class="btn-volver">← Volver</button>
+
+        <h2 class="titulo-menu">Tríadas Simples (Nivel 4)</h2>
+        <p class="subtitulo-menu">Identifica las 3 notas del acorde (de la cuadrícula) y su cualidad.</p>
+    
+        <div style="text-align: center;">
+            <div id="marcador-puntaje-triadas" class="marcador">Puntaje Total: <span>0</span> pts</div>
+        </div>
+    
+        <div style="margin-bottom: 0.75rem;">
+            <button id="boton-reto-triadas" class="btn-reto-principal">
+                🔊 Escuchar Acorde Desglosado y Conjunto
+            </button>
+        </div>
+    
+        <div id="panel-estado-triadas" class="panel-seleccion">
+            <span id="mensaje-estado-triadas">Haz clic en 'Escuchar Acorde' para comenzar.</span>
+            <button id="btn-deseleccionar-triadas" class="boton-borrar oculto">🗑️ Borrar</button>
+        </div>
+    
+        <div id="grid-notas-triadas" class="contenedor-botones-intervalos"></div>
+    
+        <div class="contenedor-opciones-intervalos">
+            <p class="subtitulo-menu" style="margin-bottom: 0.5rem;">Cualidad del Acorde:</p>
+            <div class="grid-opciones" style="grid-template-columns: repeat(4, 1fr);">
+                <button class="btn-cualidad" data-cualidad="mayor">Mayor</button>
+                <button class="btn-cualidad" data-cualidad="menor">Menor</button>
+                <button class="btn-cualidad" data-cualidad="disminuida">Disminuida</button>
+                <button class="btn-cualidad" data-cualidad="aumentada">Aumentada</button>
+            </div>
+        </div>
+    
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--color-borde); padding-top: 1rem;">
+            <h3 style="font-size: 0.95rem; color: var(--color-texto-oscuro); margin-bottom: 0.5rem;">Últimos Puntajes del Nivel</h3>
+            <ul id="lista-historial-triadas" class="lista-historial">
+                <li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/audio.js"></script>
+    <script src="/js/niveles.js"></script>
+    <script src="/js/triadas.js"></script>
 </body>
 </html>
