@@ -1,160 +1,196 @@
-// Definir la función globalmente de forma explícita y sin bucles complejos
-window.mostrarBadgeUsuarioGlobal = function(nombre) {
+/* ==========================================================
+   GESTOR DE AUTENTICACIÓN Y SESIÓN (auth.js)
+   ========================================================== */
+
+// 1. MOSTRAR EL NOMBRE DEL USUARIO EN TODAS LAS PANTALLAS
+window.mostrarBadgeUsuarioGlobal = function(nombreDelUsuarioActivo) {
+    // Menú Principal
+    const etiquetaNombreMenu = document.getElementById("nombre-usuario-badge");
+    const contenedorFlotanteMenu = document.getElementById("indicador-usuario-flotante");
+    if (etiquetaNombreMenu && contenedorFlotanteMenu) {
+        etiquetaNombreMenu.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteMenu.classList.remove("oculto");
+    }
+
     // Nivel 1 (Notas Cromáticas)
-    const badgeNivel1 = document.getElementById("nombre-usuario-badge-nivel1");
-    const indicadorNivel1 = document.getElementById("indicador-usuario-flotante-nivel1");
-    if (badgeNivel1 && indicadorNivel1) {
-        badgeNivel1.textContent = nombre;
-        indicadorNivel1.classList.remove("oculto");
+    const etiquetaNombreNivel1 = document.getElementById("nombre-usuario-badge-nivel1");
+    const contenedorFlotanteNivel1 = document.getElementById("indicador-usuario-flotante-nivel1");
+    if (etiquetaNombreNivel1 && contenedorFlotanteNivel1) {
+        etiquetaNombreNivel1.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteNivel1.classList.remove("oculto");
     }
 
     // Nivel 2 (Intervalos Simples)
-    const badgeIntervalos = document.getElementById("nombre-usuario-badge-intervalos");
-    const indicadorIntervalos = document.getElementById("indicador-usuario-flotante-intervalos");
-    if (badgeIntervalos && indicadorIntervalos) {
-        badgeIntervalos.textContent = nombre;
-        indicadorIntervalos.classList.remove("oculto");
+    const etiquetaNombreIntervalos = document.getElementById("nombre-usuario-badge-intervalos");
+    const contenedorFlotanteIntervalos = document.getElementById("indicador-usuario-flotante-intervalos");
+    if (etiquetaNombreIntervalos && contenedorFlotanteIntervalos) {
+        etiquetaNombreIntervalos.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteIntervalos.classList.remove("oculto");
     }
 
     // Nivel 3 (Intervalos Compuestos)
-    const badgeCompuestos = document.getElementById("nombre-usuario-badge-compuestos");
-    const indicadorCompuestos = document.getElementById("indicador-usuario-flotante-compuestos");
-    if (badgeCompuestos && indicadorCompuestos) {
-        badgeCompuestos.textContent = nombre;
-        indicadorCompuestos.classList.remove("oculto");
+    const etiquetaNombreCompuestos = document.getElementById("nombre-usuario-badge-compuestos");
+    const contenedorFlotanteCompuestos = document.getElementById("indicador-usuario-flotante-compuestos");
+    if (etiquetaNombreCompuestos && contenedorFlotanteCompuestos) {
+        etiquetaNombreCompuestos.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteCompuestos.classList.remove("oculto");
     }
 
     // Nivel 4 (Tríadas Simples)
-    const badgeTriadas = document.getElementById("nombre-usuario-badge-triadas");
-    const indicadorTriadas = document.getElementById("indicador-usuario-flotante-triadas");
-    if (badgeTriadas && indicadorTriadas) {
-        badgeTriadas.textContent = nombre;
-        indicadorTriadas.classList.remove("oculto");
+    const etiquetaNombreTriadas = document.getElementById("nombre-usuario-badge-triadas");
+    const contenedorFlotanteTriadas = document.getElementById("indicador-usuario-flotante-triadas");
+    if (etiquetaNombreTriadas && contenedorFlotanteTriadas) {
+        etiquetaNombreTriadas.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteTriadas.classList.remove("oculto");
     }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    let usuarioActualId = localStorage.getItem("ear_training_usuario_id");
-    let usuarioActualNombre = localStorage.getItem("ear_training_usuario_nombre");
+    
+    // 2. REVISAR SI YA HAY ALGUIEN CONECTADO
+    let idDelUsuarioGuardado = localStorage.getItem("ear_training_usuario_id");
+    let nombreDelUsuarioGuardado = localStorage.getItem("ear_training_usuario_nombre");
 
-    const vistaUsuario = document.getElementById("vista-usuario");
-    const menuNiveles = document.getElementById("menu-niveles");
-    const inputUsuario = document.getElementById("input-usuario");
-    const btnIngresar = document.getElementById("btn-ingresar");
-    const mensajeErrorUsuario = document.getElementById("mensaje-error-usuario");
-    const indicadorUsuarioFlotante = document.getElementById("indicador-usuario-flotante");
-    const btnCambiarUsuario = document.getElementById("btn-cambiar-usuario");
+    const pantallaDeIngreso = document.getElementById("vista-usuario");
+    const pantallaDelMenuDeNiveles = document.getElementById("menu-niveles");
+    const cajaDeTextoIngresoUsuario = document.getElementById("input-usuario");
+    const botonDeIngresar = document.getElementById("btn-ingresar");
+    const textoDeMensajeDeError = document.getElementById("mensaje-error-usuario");
 
-    if (usuarioActualId && usuarioActualNombre) {
-        if (vistaUsuario) vistaUsuario.classList.add("oculto");
-        if (menuNiveles) menuNiveles.classList.remove("oculto");
-        window.mostrarBadgeUsuarioGlobal(usuarioActualNombre);
+    if (idDelUsuarioGuardado && nombreDelUsuarioGuardado) {
+        if (pantallaDeIngreso) pantallaDeIngreso.classList.add("oculto");
+        if (pantallaDelMenuDeNiveles) pantallaDelMenuDeNiveles.classList.remove("oculto");
+        
+        window.mostrarBadgeUsuarioGlobal(nombreDelUsuarioGuardado);
         if (typeof cargarHistorial === "function") cargarHistorial();
     }
 
-    if (btnCambiarUsuario) {
-        btnCambiarUsuario.addEventListener("click", () => {
-            localStorage.removeItem("ear_training_usuario_id");
-            localStorage.removeItem("ear_training_usuario_nombre");
-            
-            document.querySelectorAll(".tarjeta-juego").forEach(v => v.classList.add("oculto"));
-            if (menuNiveles) menuNiveles.classList.add("oculto");
-            if (indicadorUsuarioFlotante) indicadorUsuarioFlotante.classList.add("oculto");
-            if (vistaUsuario) vistaUsuario.classList.remove("oculto");
-            if (inputUsuario) inputUsuario.value = "";
-        });
-    }
+    // 3. CERRAR SESIÓN (Cambiar Usuario)
+    // Agrupamos TODOS los botones de "Cambiar" en una lista para asegurar que funcionen en todas las pantallas
+    const listaDeBotonesParaCerrarSesion = [
+        document.getElementById("btn-cambiar-usuario"),
+        document.getElementById("btn-cambiar-usuario-nivel1"),
+        document.getElementById("btn-cambiar-usuario-intervalos"),
+        document.getElementById("btn-cambiar-usuario-compuestos"),
+        document.getElementById("btn-cambiar-usuario-triadas")
+    ];
 
-    if (btnIngresar) {
-        btnIngresar.addEventListener("click", async () => {
-            const nombreIngresado = inputUsuario.value.trim().toLowerCase();
+    // Recorremos la lista y le damos la orden de cerrar sesión a cada botón que exista
+    listaDeBotonesParaCerrarSesion.forEach(botonIndividual => {
+        if (botonIndividual) {
+            botonIndividual.addEventListener("click", () => {
+                localStorage.removeItem("ear_training_usuario_id");
+                localStorage.removeItem("ear_training_usuario_nombre");
+                
+                document.querySelectorAll(".tarjeta-juego").forEach(tarjeta => tarjeta.classList.add("oculto"));
+                if (pantallaDelMenuDeNiveles) pantallaDelMenuDeNiveles.classList.add("oculto");
+                
+                if (pantallaDeIngreso) pantallaDeIngreso.classList.remove("oculto");
+                if (cajaDeTextoIngresoUsuario) cajaDeTextoIngresoUsuario.value = "";
+            });
+        }
+    });
 
-            if (!nombreIngresado) {
-                mensajeErrorUsuario.textContent = "⚠️ Por favor ingresa un nombre de usuario.";
-                mensajeErrorUsuario.classList.remove("oculto");
-                return;
+    // 4. INICIAR SESIÓN O CREAR USUARIO NUEVO
+    if (botonDeIngresar) {
+        botonDeIngresar.addEventListener("click", async () => {
+            const nombreEscritoPorElUsuario = cajaDeTextoIngresoUsuario.value.trim().toLowerCase();
+
+            if (!nombreEscritoPorElUsuario) {
+                textoDeMensajeDeError.textContent = "⚠️ Por favor ingresa un nombre de usuario.";
+                textoDeMensajeDeError.classList.remove("oculto");
+                return; 
             }
 
-            if (nombreIngresado.includes(" ")) {
-                mensajeErrorUsuario.textContent = "⚠️ El nombre de usuario no debe contener espacios.";
-                mensajeErrorUsuario.classList.remove("oculto");
+            if (nombreEscritoPorElUsuario.includes(" ")) {
+                textoDeMensajeDeError.textContent = "⚠️ El nombre de usuario no debe contener espacios.";
+                textoDeMensajeDeError.classList.remove("oculto");
                 return;
             }
 
             try {
-                const respuesta = await fetch("http://localhost:5001/api/usuarios", {
-                    method: "POST",
+                const respuestaDelServidorBD = await fetch("http://localhost:5001/api/usuarios", {
+                    method: "POST", 
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ nombre: nombreIngresado })
+                    body: JSON.stringify({ nombre: nombreEscritoPorElUsuario })
                 });
 
-                const resultado = await respuesta.json();
+                const datosProcesadosDeRespuesta = await respuestaDelServidorBD.json();
 
-                if (respuesta.ok) {
-                    localStorage.setItem("ear_training_usuario_id", resultado.usuario_id);
-                    localStorage.setItem("ear_training_usuario_nombre", resultado.nombre);
+                if (respuestaDelServidorBD.ok) {
+                    localStorage.setItem("ear_training_usuario_id", datosProcesadosDeRespuesta.usuario_id);
+                    localStorage.setItem("ear_training_usuario_nombre", datosProcesadosDeRespuesta.nombre);
 
-                    vistaUsuario.classList.add("oculto");
-                    menuNiveles.classList.remove("oculto");
-                    window.mostrarBadgeUsuarioGlobal(resultado.nombre);
-
+                    pantallaDeIngreso.classList.add("oculto");
+                    pantallaDelMenuDeNiveles.classList.remove("oculto");
+                    
+                    window.mostrarBadgeUsuarioGlobal(datosProcesadosDeRespuesta.nombre);
                     if (typeof cargarHistorial === "function") cargarHistorial();
                 } else {
-                    mensajeErrorUsuario.textContent = `⚠️ ${resultado.error}`;
-                    mensajeErrorUsuario.classList.remove("oculto");
+                    textoDeMensajeDeError.textContent = `⚠️ ${datosProcesadosDeRespuesta.error}`;
+                    textoDeMensajeDeError.classList.remove("oculto");
                 }
-            } catch (error) {
-                console.error("Error al registrar usuario:", error);
-                mensajeErrorUsuario.textContent = "⚠️ Error al conectar con el servidor.";
-                mensajeErrorUsuario.classList.remove("oculto");
+            } catch (errorDeConexion) {
+                console.error("Error al registrar usuario:", errorDeConexion);
+                textoDeMensajeDeError.textContent = "⚠️ Error al conectar con el servidor.";
+                textoDeMensajeDeError.classList.remove("oculto");
             }
         });
     }
 
-    // Autocompletado de usuarios
-    const contenedorSugerencias = document.getElementById("sugerencias-usuarios");
-    let listaUsuariosGlobal = [];
+    // 5. SISTEMA DE AUTOCOMPLETADO
+    const contenedorDeSugerenciasFlotantes = document.getElementById("sugerencias-usuarios");
+    let listaGlobalDeUsuariosRegistrados = [];
 
-    async function cargarUsuariosExistentes() {
+    async function solicitarListaDeUsuariosAlServidor() {
         try {
-            const respuesta = await fetch("http://localhost:5001/api/usuarios");
-            const resultado = await respuesta.json();
-            if (respuesta.ok) listaUsuariosGlobal = resultado.usuarios;
-        } catch (error) {
-            console.error("Error al cargar usuarios:", error);
+            const respuestaDelServidor = await fetch("http://localhost:5001/api/usuarios");
+            const datosExtraidos = await respuestaDelServidor.json();
+            if (respuestaDelServidor.ok) listaGlobalDeUsuariosRegistrados = datosExtraidos.usuarios;
+        } catch (errorDeConexion) {
+            console.error("Error al cargar la lista completa de usuarios:", errorDeConexion);
         }
     }
-    cargarUsuariosExistentes();
+    solicitarListaDeUsuariosAlServidor();
 
-    if (inputUsuario) {
-        inputUsuario.addEventListener("input", () => {
-            const textoEscrito = inputUsuario.value.trim().toLowerCase();
-            contenedorSugerencias.innerHTML = "";
-            if (textoEscrito.length === 0) {
-                contenedorSugerencias.style.display = "none";
+    if (cajaDeTextoIngresoUsuario) {
+        cajaDeTextoIngresoUsuario.addEventListener("input", () => {
+            const textoQueVaEscribiendo = cajaDeTextoIngresoUsuario.value.trim().toLowerCase();
+            
+            contenedorDeSugerenciasFlotantes.innerHTML = "";
+            
+            if (textoQueVaEscribiendo.length === 0) {
+                contenedorDeSugerenciasFlotantes.style.display = "none";
                 return;
             }
-            const filtrados = listaUsuariosGlobal.filter(u => u.nombre.startsWith(textoEscrito));
-            if (filtrados.length > 0) {
-                contenedorSugerencias.style.display = "block";
-                filtrados.forEach(usuario => {
-                    const divItem = document.createElement("div");
-                    divItem.className = "sugerencia-item";
-                    divItem.textContent = usuario.nombre;
-                    divItem.addEventListener("click", () => {
-                        inputUsuario.value = usuario.nombre;
-                        contenedorSugerencias.style.display = "none";
+            
+            const listaDeUsuariosFiltrados = listaGlobalDeUsuariosRegistrados.filter(usuarioIndividual => 
+                usuarioIndividual.nombre.startsWith(textoQueVaEscribiendo)
+            );
+            
+            if (listaDeUsuariosFiltrados.length > 0) {
+                contenedorDeSugerenciasFlotantes.style.display = "block";
+                
+                listaDeUsuariosFiltrados.forEach(usuarioEncontrado => {
+                    const bloqueDeSugerencia = document.createElement("div");
+                    bloqueDeSugerencia.className = "sugerencia-item";
+                    bloqueDeSugerencia.textContent = usuarioEncontrado.nombre;
+                    
+                    bloqueDeSugerencia.addEventListener("click", () => {
+                        cajaDeTextoIngresoUsuario.value = usuarioEncontrado.nombre;
+                        contenedorDeSugerenciasFlotantes.style.display = "none";
                     });
-                    contenedorSugerencias.appendChild(divItem);
+                    
+                    contenedorDeSugerenciasFlotantes.appendChild(bloqueDeSugerencia);
                 });
             } else {
-                contenedorSugerencias.style.display = "none";
+                contenedorDeSugerenciasFlotantes.style.display = "none";
             }
         });
 
-        document.addEventListener("click", (e) => {
-            if (e.target !== inputUsuario && e.target !== contenedorSugerencias) {
-                contenedorSugerencias.style.display = "none";
+        document.addEventListener("click", (eventoDeClicGeneral) => {
+            if (eventoDeClicGeneral.target !== cajaDeTextoIngresoUsuario && eventoDeClicGeneral.target !== contenedorDeSugerenciasFlotantes) {
+                contenedorDeSugerenciasFlotantes.style.display = "none";
             }
         });
     }
