@@ -183,7 +183,8 @@ window.cargarHistorial = async function() {
             "lista-historial-intervalos", 
             "lista-historial-compuestos", 
             "lista-historial-triadas",
-            "lista-historial-suspendidas"
+            "lista-historial-suspendidas",
+            "lista-historial-septimas"
         ];
 
         // Recorremos una por una las cajas y las rellenamos con la información

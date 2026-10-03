@@ -51,6 +51,14 @@ window.mostrarBadgeUsuarioGlobal = function(nombreDelUsuarioActivo) {
         etiquetaNombreSuspendidas.textContent = nombreDelUsuarioActivo;
         contenedorFlotanteSuspendidas.classList.remove("oculto");
     }
+
+    // Nivel 6 (Séptimas)
+    const etiquetaNombreSeptimas = document.getElementById("nombre-usuario-badge-septimas");
+    const contenedorFlotanteSeptimas = document.getElementById("indicador-usuario-flotante-septimas");
+    if (etiquetaNombreSeptimas && contenedorFlotanteSeptimas) {
+        etiquetaNombreSeptimas.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteSeptimas.classList.remove("oculto");
+    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -81,7 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("btn-cambiar-usuario-intervalos"),
         document.getElementById("btn-cambiar-usuario-compuestos"),
         document.getElementById("btn-cambiar-usuario-triadas"),
-        document.getElementById("btn-cambiar-usuario-suspendidas")
+        document.getElementById("btn-cambiar-usuario-suspendidas"),
+        document.getElementById("btn-cambiar-usuario-septimas")
     ];
 
     // Recorremos la lista y le damos la orden de cerrar sesión a cada botón que exista

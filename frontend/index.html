@@ -54,6 +54,9 @@
             <button class="boton-nivel" data-nivel="triadas-suspendidas">
                 🎸 Tríadas Suspendidas (Sus2 y Sus4) <span class="badge-nivel">Nivel 5</span>
             </button>
+            <button class="boton-nivel" data-nivel="acordes-septima">
+                🎹 Acordes de Séptima (Tétradas) <span class="badge-nivel">Nivel 6</span>
+            </button>
         </div>
     </div>
 
@@ -291,11 +294,70 @@
         </div>
     </div>
 
+    <!-- 🌟 Vista 7: Nivel 6 - Acordes de Séptima -->
+    <div id="vista-septimas" class="tarjeta-juego oculto">
+        <div id="indicador-usuario-flotante-septimas" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge-septimas"></strong></span>
+            <button id="btn-cambiar-usuario-septimas" title="Cambiar de usuario">Cambiar</button>
+        </div>
+
+        <button id="btn-volver-septimas" class="btn-volver">← Volver</button>
+
+        <h2 class="titulo-menu">Acordes de Séptima (Nivel 6)</h2>
+        <p class="subtitulo-menu">Identifica las 4 notas y la cualidad de la tétrada.</p>
+    
+        <div style="text-align: center;">
+            <div id="marcador-puntaje-septimas" class="marcador">Puntaje Total: <span>0</span> pts</div>
+        </div>
+    
+        <div style="margin-bottom: 0.75rem;">
+            <button id="boton-reto-septimas" class="btn-reto-principal">
+                🔊 Escuchar Acorde de Séptima
+            </button>
+        </div>
+    
+        <div id="panel-estado-septimas" class="panel-seleccion">
+            <span id="mensaje-estado-septimas">Haz clic en 'Escuchar Acorde' para comenzar.</span>
+            <button id="btn-deseleccionar-septimas" class="boton-borrar oculto">🗑️ Borrar</button>
+        </div>
+    
+        <div id="grid-notas-septimas" class="contenedor-botones-intervalos"></div>
+    
+        <div class="contenedor-opciones-intervalos">
+            <p class="subtitulo-menu" style="margin-bottom: 0.5rem;">Cualidad del Acorde:</p>
+            <div class="grid-opciones" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%;">
+                <button class="btn-cualidad-septima btn-cualidad" data-cualidad="Maj7" style="width: 100%;">
+                    Maj7<br><small style="font-size: 0.75em; font-weight: normal;">(Séptima Mayor)</small>
+                </button>
+                <button class="btn-cualidad-septima btn-cualidad" data-cualidad="7" style="width: 100%;">
+                    Dom7<br><small style="font-size: 0.75em; font-weight: normal;">(Dominante)</small>
+                </button>
+                <button class="btn-cualidad-septima btn-cualidad" data-cualidad="m7" style="width: 100%;">
+                    m7<br><small style="font-size: 0.75em; font-weight: normal;">(Séptima Menor)</small>
+                </button>
+                <button class="btn-cualidad-septima btn-cualidad" data-cualidad="m7b5" style="width: 100%;">
+                    m7b5<br><small style="font-size: 0.75em; font-weight: normal;">(Semidisminuido)</small>
+                </button>
+                <button class="btn-cualidad-septima btn-cualidad" data-cualidad="dim7" style="grid-column: span 2; width: 100%;">
+                    dim7<br><small style="font-size: 0.75em; font-weight: normal;">(Séptima Disminuida)</small>
+                </button>
+            </div>
+        </div>
+    
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--color-borde); padding-top: 1rem;">
+            <h3 style="font-size: 0.95rem; color: var(--color-texto-oscuro); margin-bottom: 0.5rem;">Últimos Puntajes del Nivel</h3>
+            <ul id="lista-historial-septimas" class="lista-historial">
+                <li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>
+            </ul>
+        </div>
+    </div>
+
     <script src="/js/auth.js"></script>
     <script src="/js/audio.js"></script>
     <script src="/js/niveles.js"></script>
     <script src="/js/intervalos.js"></script>
     <script src="/js/triadas.js"></script>
     <script src="/js/suspendidas.js"></script>
+    <script src="/js/septimas.js"></script>
 </body>
 </html>

@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pantallaDelNivel3_IntervalosCompuestos = document.getElementById("vista-intervalos-compuestos");
     const pantallaDelNivel4_Triadas = document.getElementById("vista-triadas");
     const pantallaDelNivel5_Suspendidas = document.getElementById("vista-suspendidas");
+    const pantallaDelNivel6_Septimas = document.getElementById("vista-septimas");
 
     // 1.2 Buscamos los botones pequeños azules de "Volver" que están en la esquina superior de cada nivel
     const botonDeVolverDelNivel1 = document.getElementById("btn-volver");
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonDeVolverDelNivel3 = document.getElementById("btn-volver-compuestos");
     const botonDeVolverDelNivel4 = document.getElementById("btn-volver-triadas");
     const botonDeVolverDelNivel5 = document.getElementById("btn-volver-suspendidas");
+    const botonDeVolverDelNivel6 = document.getElementById("btn-volver-septimas");
 
     // Variable de control para llevar el registro interno de dónde está jugando el usuario
     let nombreDelNivelActivo = "Notas Cromáticas";
@@ -57,6 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (tipoDeNivelElegido === "triadas-suspendidas") {
                 nombreDelNivelActivo = "Tríadas Suspendidas";
                 if (pantallaDelNivel5_Suspendidas) pantallaDelNivel5_Suspendidas.classList.remove("oculto");
+            } else if (tipoDeNivelElegido === "acordes-septima") {
+                nombreDelNivelActivo = "Acordes de Séptima";
+                if (pantallaDelNivel6_Septimas) pantallaDelNivel6_Septimas.classList.remove("oculto");
             }
         });
     });
@@ -97,7 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (pantallaDelMenuPrincipal) pantallaDelMenuPrincipal.classList.remove("oculto");
         });
     }
-
+    
+    if (botonDeVolverDelNivel6) {
+        botonDeVolverDelNivel6.addEventListener("click", () => {
+            if (pantallaDelNivel6_Septimas) pantallaDelNivel6_Septimas.classList.add("oculto");
+            if (pantallaDelMenuPrincipal) pantallaDelMenuPrincipal.classList.remove("oculto");
+        });
+    }
 
     // ------------------------------------------------------
     // SECCIÓN 2: LÓGICA DEL NIVEL 1 (NOTAS CROMÁTICAS)
