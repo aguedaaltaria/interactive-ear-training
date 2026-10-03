@@ -109,6 +109,76 @@ def guardar_puntaje():
 
     return jsonify({'mensaje': 'Registro guardado', 'id': nuevo_id, 'nivel': nivel, 'puntaje': puntaje, 'resultado': resultado}), 201
 
+
+@app.route('/api/estadisticas/<int:usuario_id>', methods=['GET'])
+def obtener_estadisticas(usuario_id):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    # 1. Puntaje Global Histórico (Suma total de todos los puntos)
+    cursor.execute('SELECT SUM(puntaje) as total_puntos FROM puntajes WHERE usuario_id = ?', (usuario_id,))
+    resultado_puntos = cursor.fetchone()
+    total_puntos = resultado_puntos['total_puntos'] if resultado_puntos['total_puntos'] else 0
+
+    # 2. Tasa de Precisión y Total de Fallos
+    cursor.execute('''
+        SELECT 
+            COUNT(*) as total_jugadas, 
+            SUM(CASE WHEN resultado = 'acierto' THEN 1 ELSE 0 END) as total_aciertos 
+        FROM puntajes 
+        WHERE usuario_id = ?
+    ''', (usuario_id,))
+    resultado_precision = cursor.fetchone()
+    total_jugadas = resultado_precision['total_jugadas'] or 0
+    total_aciertos = resultado_precision['total_aciertos'] or 0
+    
+    # Restamos para obtener los fallos exactos
+    total_fallos = total_jugadas - total_aciertos
+    
+    tasa_precision = 0
+    if total_jugadas > 0:
+        tasa_precision = round((total_aciertos / total_jugadas) * 100)
+
+    # 3. Nivel Más Jugado
+    cursor.execute('''
+        SELECT nivel, COUNT(*) as cantidad 
+        FROM puntajes 
+        WHERE usuario_id = ? 
+        GROUP BY nivel 
+        ORDER BY cantidad DESC 
+        LIMIT 1
+    ''', (usuario_id,))
+    resultado_nivel = cursor.fetchone()
+    nivel_favorito = resultado_nivel['nivel'] if resultado_nivel else "Aún no hay datos"
+
+    # 4. Racha de Aciertos Actual
+    cursor.execute('''
+        SELECT resultado 
+        FROM puntajes 
+        WHERE usuario_id = ? 
+        ORDER BY fecha DESC, id DESC
+    ''', (usuario_id,))
+    historial_resultados = cursor.fetchall()
+    
+    racha_actual = 0
+    for fila in historial_resultados:
+        if fila['resultado'] == 'acierto':
+            racha_actual += 1
+        else:
+            break # Si encontramos un fallo, la racha se rompe
+
+    conexion.close()
+
+    return jsonify({
+        'total_puntos': total_puntos,
+        'tasa_precision': f"{tasa_precision}%",
+        'total_fallos': total_fallos,
+        'nivel_favorito': nivel_favorito,
+        'racha_actual': racha_actual
+    }), 200
+
+
+
 if __name__ == '__main__':
   # Como Flask corre en el puerto 5001, abrimos directamente esa dirección
   def abrir_navegador():

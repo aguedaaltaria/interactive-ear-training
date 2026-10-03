@@ -5,10 +5,10 @@
 // 1. MOSTRAR EL NOMBRE DEL USUARIO EN TODAS LAS PANTALLAS
 window.mostrarBadgeUsuarioGlobal = function(nombreDelUsuarioActivo) {
     // Menú Principal
-    const etiquetaNombreMenu = document.getElementById("nombre-usuario-badge");
-    const contenedorFlotanteMenu = document.getElementById("indicador-usuario-flotante");
+    const etiquetaNombreMenu = document.getElementById("nombre-usuario-badge-menu");
+    const contenedorFlotanteMenu = document.getElementById("indicador-usuario-flotante-menu");
     if (etiquetaNombreMenu && contenedorFlotanteMenu) {
-        etiquetaNombreMenu.textContent = nombreDelUsuarioActivo;
+        etiquetaNombreMenu.textContent = nombreDelUsuarioActivo; 
         contenedorFlotanteMenu.classList.remove("oculto");
     }
 
@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 3. CERRAR SESIÓN (Cambiar Usuario)
     // Agrupamos TODOS los botones de "Cambiar" en una lista para asegurar que funcionen en todas las pantallas
     const listaDeBotonesParaCerrarSesion = [
+        document.getElementById("btn-cambiar-usuario-menu"),
         document.getElementById("btn-cambiar-usuario"),
         document.getElementById("btn-cambiar-usuario-nivel1"),
         document.getElementById("btn-cambiar-usuario-intervalos"),
@@ -210,6 +211,55 @@ document.addEventListener("DOMContentLoaded", () => {
             if (eventoDeClicGeneral.target !== cajaDeTextoIngresoUsuario && eventoDeClicGeneral.target !== contenedorDeSugerenciasFlotantes) {
                 contenedorDeSugerenciasFlotantes.style.display = "none";
             }
+        });
+    }
+});
+
+// ==========================================
+// LÓGICA DEL PANEL DE ESTADÍSTICAS
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const btnAbrirEstadisticas = document.getElementById("btn-abrir-estadisticas");
+    const btnCerrarEstadisticas = document.getElementById("btn-cerrar-estadisticas");
+    const modalEstadisticas = document.getElementById("modal-estadisticas");
+
+    if (btnAbrirEstadisticas && modalEstadisticas) {
+        btnAbrirEstadisticas.addEventListener("click", async () => {
+            // 1. Abre la ventana
+            modalEstadisticas.classList.remove("oculto");
+
+            // 2. Busca el ID del usuario
+            const usuarioId = localStorage.getItem("ear_training_usuario_id");
+            console.log("Usuario ID encontrado:", usuarioId);
+
+            if (!usuarioId) {
+                console.error("¡No se encontró el ID! Revisa bien el nombre en el Local Storage.");
+                return;
+            }
+
+            try {
+                // 3. Llama al backend en Python
+                const respuesta = await fetch(`/api/estadisticas/${usuarioId}`);
+                const datos = await respuesta.json();
+
+                if (respuesta.ok) {
+                    // 4. Pone los números en el HTML
+                    document.getElementById("stat-puntos").textContent = datos.total_puntos;
+                    document.getElementById("stat-precision").textContent = datos.tasa_precision;
+                    document.getElementById("stat-fallos").textContent = datos.total_fallos;
+                    document.getElementById("stat-racha").textContent = datos.racha_actual;
+                    document.getElementById("stat-nivel").textContent = datos.nivel_favorito;
+                }
+            } catch (error) {
+                console.error("Error al cargar las estadísticas:", error);
+            }
+        });
+    }
+
+    if (btnCerrarEstadisticas && modalEstadisticas) {
+        btnCerrarEstadisticas.addEventListener("click", () => {
+            // Cierra la ventana
+            modalEstadisticas.classList.add("oculto");
         });
     }
 });

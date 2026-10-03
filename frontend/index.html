@@ -11,6 +11,37 @@
 </head>
 <body>
 
+    <!-- 🌟 VENTANA EMERGENTE DE ESTADÍSTICAS -->
+    <div id="modal-estadisticas" class="modal-fondo oculto">
+        <div class="modal-contenido">
+            <button id="btn-cerrar-estadisticas" class="btn-cerrar-modal">✖</button>
+            <h2 class="titulo-menu">Tus Estadísticas 🏆</h2>
+            
+            <div class="grid-estadisticas">
+                <div class="tarjeta-stat">
+                    <h3>Puntaje Global</h3>
+                    <p id="stat-puntos">0</p>
+                </div>
+                <div class="tarjeta-stat">
+                    <h3>Precisión</h3>
+                    <p id="stat-precision">0%</p>
+                </div>
+                <div class="tarjeta-stat">
+                    <h3>Fallos Totales</h3>
+                    <p id="stat-fallos">0</p>
+                </div>
+                <div class="tarjeta-stat">
+                    <h3>Racha Actual</h3>
+                    <p id="stat-racha">0</p>
+                </div>
+                <div class="tarjeta-stat" style="grid-column: span 2;">
+                    <h3>Nivel Favorito</h3>
+                    <p id="stat-nivel">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 🌟 Vista 0: Pantalla de Ingreso de Usuario -->
     <div id="vista-usuario" class="tarjeta-juego">
         <h2 class="titulo-menu">👤 Identificación de Usuario</h2>
@@ -31,9 +62,10 @@
 
     <!-- 🌟 Vista 1: Menú de Niveles -->
     <div id="menu-niveles" class="tarjeta-juego vista-menu oculto">
-        <div id="indicador-usuario-flotante" class="badge-usuario-activo oculto">
-            <span>👤 <strong id="nombre-usuario-badge"></strong></span>
-            <button id="btn-cambiar-usuario" title="Cambiar de usuario">Cambiar</button>
+        <div id="indicador-usuario-flotante-menu" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge-menu"></strong></span>
+            <button id="btn-cambiar-usuario-menu" title="Cambiar de usuario">Cambiar</button>
+            <button id="btn-abrir-estadisticas" class="btn-secundario" style="margin-left: 10px;">📊 Mis Estadísticas</button>
         </div>
         <h2 class="titulo-menu">Selecciona un Nivel</h2>
         <p class="subtitulo-menu">Elige el tipo de entrenamiento auditivo que deseas realizar:</p>
