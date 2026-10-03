@@ -43,6 +43,14 @@ window.mostrarBadgeUsuarioGlobal = function(nombreDelUsuarioActivo) {
         etiquetaNombreTriadas.textContent = nombreDelUsuarioActivo;
         contenedorFlotanteTriadas.classList.remove("oculto");
     }
+
+    // Nivel 5 (Tríadas Suspendidas)
+    const etiquetaNombreSuspendidas = document.getElementById("nombre-usuario-badge-suspendidas");
+    const contenedorFlotanteSuspendidas = document.getElementById("indicador-usuario-flotante-suspendidas");
+    if (etiquetaNombreSuspendidas && contenedorFlotanteSuspendidas) {
+        etiquetaNombreSuspendidas.textContent = nombreDelUsuarioActivo;
+        contenedorFlotanteSuspendidas.classList.remove("oculto");
+    }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -72,7 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("btn-cambiar-usuario-nivel1"),
         document.getElementById("btn-cambiar-usuario-intervalos"),
         document.getElementById("btn-cambiar-usuario-compuestos"),
-        document.getElementById("btn-cambiar-usuario-triadas")
+        document.getElementById("btn-cambiar-usuario-triadas"),
+        document.getElementById("btn-cambiar-usuario-suspendidas")
     ];
 
     // Recorremos la lista y le damos la orden de cerrar sesión a cada botón que exista
