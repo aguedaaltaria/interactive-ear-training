@@ -1,8 +1,8 @@
 /* ==========================================================
-   LÓGICA DEL NIVEL 6: ACORDES DE SÉPTIMA (septimas.js)
+   LÓGICA DEL NIVEL 6: ACORDES DE SÉPTIMA E INVERSIONES (septimas.js)
    ========================================================== */
 
-   document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     
     // ------------------------------------------------------
     // 1. CONEXIÓN CON LOS ELEMENTOS DE LA PANTALLA (HTML)
@@ -17,7 +17,6 @@
     // ------------------------------------------------------
     // 2. VARIABLES DE MEMORIA PARA EL JUEGO ACTUAL
     // ------------------------------------------------------
-    // Esta lista ahora podrá tener 3 o 4 notas, dependiendo de si se omite la quinta
     let listaDeNotasDelAcordeSecretoSeptima = [];
     let cualidadSecretaDelAcordeSeptima = null; 
     
@@ -54,7 +53,7 @@
             
             if (listaDeNotasDelAcordeSecretoSeptima.length === 0) {
                 
-                const indiceDeLaNotaRaiz = Math.floor(Math.random() * 13);
+                const indiceDeLaNotaRaiz = Math.floor(Math.random() * 11);
                 
                 const listaDeCualidadesDeSeptima = [
                     { nombre: "Maj7", distanciaTercera: 4, distanciaQuinta: 7, distanciaSeptima: 11 },
@@ -67,37 +66,78 @@
                 const objetoDeCualidadSeleccionada = listaDeCualidadesDeSeptima[Math.floor(Math.random() * listaDeCualidadesDeSeptima.length)];
                 cualidadSecretaDelAcordeSeptima = objetoDeCualidadSeleccionada.nombre;
 
-                const indiceNotaUno = indiceDeLaNotaRaiz;
-                const indiceNotaDos = indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaTercera;
-                const indiceNotaTres = indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaQuinta;
-                const indiceNotaCuatro = indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaSeptima;
+                let objetoNotaRaiz = window.bancoNotas24[indiceDeLaNotaRaiz];
+                let objetoNotaTercera = window.bancoNotas24[indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaTercera];
+                let objetoNotaQuinta = window.bancoNotas24[indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaQuinta];
+                let objetoNotaSeptima = window.bancoNotas24[indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaSeptima];
 
-                // NUEVA LÓGICA: ¿Omitimos la quinta (Shell Voicing)?
+                // Decidimos si omitimos la quinta justa de forma independiente
                 let omitirQuintaJusta = false;
+                const esQuintaJusta = objetoDeCualidadSeleccionada.distanciaQuinta === 7;
                 
-                // Solo nos permitimos omitir la quinta si es una quinta justa (7 semitonos de distancia).
-                // Los acordes m7b5 y dim7 tienen quintas alteradas (6 semitonos), así que esas NUNCA se omiten.
-                if (objetoDeCualidadSeleccionada.distanciaQuinta === 7) {
-                    // 50% de probabilidad de jugar con 3 notas en lugar de 4
-                    omitirQuintaJusta = Math.random() > 0.5;
+                if (esQuintaJusta) {
+                    const numeroAleatorioOmision = Math.random() * 100;
+                    if (numeroAleatorioOmision > 50) {
+                        omitirQuintaJusta = true;
+                    }
                 }
 
-                if (omitirQuintaJusta) {
-                    // Acorde de 3 notas (Raíz, Tercera, Séptima)
-                    listaDeNotasDelAcordeSecretoSeptima = [
-                        window.bancoNotas24[indiceNotaUno],
-                        window.bancoNotas24[indiceNotaDos],
-                        window.bancoNotas24[indiceNotaCuatro] // Saltamos la nota tres (la quinta)
-                    ];
+                // Creamos la lista base de notas según la omisión
+                let listaNotasBase = [];
+                if (omitirQuintaJusta === true) {
+                    listaNotasBase = [objetoNotaRaiz, objetoNotaTercera, objetoNotaSeptima];
                 } else {
-                    // Acorde completo de 4 notas
-                    listaDeNotasDelAcordeSecretoSeptima = [
-                        window.bancoNotas24[indiceNotaUno],
-                        window.bancoNotas24[indiceNotaDos],
-                        window.bancoNotas24[indiceNotaTres],
-                        window.bancoNotas24[indiceNotaCuatro]
-                    ];
+                    listaNotasBase = [objetoNotaRaiz, objetoNotaTercera, objetoNotaQuinta, objetoNotaSeptima];
                 }
+
+                // Aplicamos las inversiones usando porcentajes explícitos
+                const numeroAleatorioInversion = Math.random() * 100;
+                let listaNotasInvertidas = [...listaNotasBase];
+
+                const cantidadNotasEnBase = listaNotasBase.length;
+
+                if (cantidadNotasEnBase === 4) {
+                    let raizEnOctavaSuperior = { nombre: objetoNotaRaiz.nombre + " (St)", frecuencia: objetoNotaRaiz.frecuencia * 2 };
+                    let terceraEnOctavaSuperior = { nombre: objetoNotaTercera.nombre + " (St)", frecuencia: objetoNotaTercera.frecuencia * 2 };
+                    let quintaEnOctavaSuperior = { nombre: objetoNotaQuinta.nombre + " (St)", frecuencia: objetoNotaQuinta.frecuencia * 2 };
+
+                    const esPrimeraInversion = numeroAleatorioInversion >= 40 && numeroAleatorioInversion < 60;
+                    const esSegundaInversion = numeroAleatorioInversion >= 60 && numeroAleatorioInversion < 80;
+                    const esTerceraInversion = numeroAleatorioInversion >= 80;
+
+                    if (esPrimeraInversion) {
+                        listaNotasInvertidas = [objetoNotaTercera, objetoNotaQuinta, objetoNotaSeptima, raizEnOctavaSuperior];
+                    } else if (esSegundaInversion) {
+                        listaNotasInvertidas = [objetoNotaQuinta, objetoNotaSeptima, raizEnOctavaSuperior, terceraEnOctavaSuperior];
+                    } else if (esTerceraInversion) {
+                        listaNotasInvertidas = [objetoNotaSeptima, raizEnOctavaSuperior, terceraEnOctavaSuperior, quintaEnOctavaSuperior];
+                    }
+                } else {
+                    let raizEnOctavaSuperior = { nombre: objetoNotaRaiz.nombre + " (St)", frecuencia: objetoNotaRaiz.frecuencia * 2 };
+                    let terceraEnOctavaSuperior = { nombre: objetoNotaTercera.nombre + " (St)", frecuencia: objetoNotaTercera.frecuencia * 2 };
+
+                    const esPrimeraInversionTresNotas = numeroAleatorioInversion >= 40 && numeroAleatorioInversion < 65;
+                    const esSegundaInversionTresNotas = numeroAleatorioInversion >= 65;
+
+                    if (esPrimeraInversionTresNotas) {
+                        listaNotasInvertidas = [objetoNotaTercera, objetoNotaSeptima, raizEnOctavaSuperior];
+                    } else if (esSegundaInversionTresNotas) {
+                        listaNotasInvertidas = [objetoNotaSeptima, raizEnOctavaSuperior, terceraEnOctavaSuperior];
+                    }
+                }
+
+                // Añadimos duplicación de la nota más grave superior a veces (35% de probabilidad)
+                const numeroAleatorioDuplicacion = Math.random() * 100;
+                if (numeroAleatorioDuplicacion < 35) {
+                    let notaMasGraveActual = listaNotasInvertidas[0];
+                    let notaBajoDuplicada = { 
+                        nombre: notaMasGraveActual.nombre + " (Dub)", 
+                        frecuencia: notaMasGraveActual.frecuencia * 2 
+                    };
+                    listaNotasInvertidas.push(notaBajoDuplicada);
+                }
+
+                listaDeNotasDelAcordeSecretoSeptima = listaNotasInvertidas;
 
                 listaDeNotasElegidasPorElUsuario = [];
                 cualidadElegidaPorElUsuario = null;
@@ -106,15 +146,16 @@
                 botonesDeLaCuadricula.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
                 listaDeBotonesDeCualidadSeptima.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
                 
-                if (botonParaBorrarSeleccionSeptimas) botonParaBorrarSeleccionSeptimas.classList.add("oculto");
+                if (botonParaBorrarSeleccionSeptimas) {
+                    botonParaBorrarSeleccionSeptimas.classList.add("oculto");
+                }
             }
 
-            // El mensaje dinámico le avisa al usuario si está buscando 3 o 4 notas
-            const cantidadDeNotasRequeridasParaEsteReto = listaDeNotasDelAcordeSecretoSeptima.length;
-            cuadroDeMensajeVisualSeptimas.textContent = `🔊 Reproduciendo acorde de séptima (${cantidadDeNotasRequeridasParaEsteReto} notas)...`;
+            cuadroDeMensajeVisualSeptimas.textContent = "🔊 Reproduciendo acorde de séptima con inversión y sonoridad real...";
             cuadroDeMensajeVisualSeptimas.className = "mensaje-neutro";
 
-            window.reproducirSecuenciaAcorde(listaDeNotasDelAcordeSecretoSeptima.map(notaIndividual => notaIndividual.frecuencia));
+            const frecuenciasParaReproducir = listaDeNotasDelAcordeSecretoSeptima.map(objetoNota => objetoNota.frecuencia);
+            window.reproducirSecuenciaAcorde(frecuenciasParaReproducir);
         });
     }
 
@@ -130,11 +171,25 @@
                     return;
                 }
                 
-                // Leemos dinámicamente si el reto actual exige 3 o 4 notas
-                const cantidadDeNotasRequeridasParaEsteReto = listaDeNotasDelAcordeSecretoSeptima.length;
-                
-                // Bloqueamos clics adicionales si ya alcanzó el límite de esta ronda
-                if (listaDeNotasElegidasPorElUsuario.length >= cantidadDeNotasRequeridasParaEsteReto) return;
+                // Determinamos cuántas notas base debe elegir el usuario según el tamaño del acorde secreto
+                let cantidadNotasRequeridas = 4;
+                const tieneNotasModificadas = listaDeNotasDelAcordeSecretoSeptima.some(objetoNota => 
+                    objetoNota.nombre.includes("St") || objetoNota.nombre.includes("Dub")
+                );
+
+                if (tieneNotasModificadas === true) {
+                    if (listaDeNotasDelAcordeSecretoSeptima.length > 4) {
+                        cantidadNotasRequeridas = 4;
+                    } else {
+                        cantidadNotasRequeridas = 3;
+                    }
+                } else {
+                    cantidadNotasRequeridas = listaDeNotasDelAcordeSecretoSeptima.length;
+                }
+
+                if (listaDeNotasElegidasPorElUsuario.length >= cantidadNotasRequeridas) {
+                    return;
+                }
 
                 const frecuenciaDelBotonPresionado = parseFloat(eventoDeClicGeneral.target.getAttribute("data-frecuencia"));
                 const nombreEscritoDelBotonPresionado = eventoDeClicGeneral.target.textContent;
@@ -142,14 +197,21 @@
                 window.reproducirTono(frecuenciaDelBotonPresionado);
                 eventoDeClicGeneral.target.classList.add("seleccionada");
                 
-                if (botonParaBorrarSeleccionSeptimas) botonParaBorrarSeleccionSeptimas.classList.remove("oculto");
+                if (botonParaBorrarSeleccionSeptimas) {
+                    botonParaBorrarSeleccionSeptimas.classList.remove("oculto");
+                }
 
-                listaDeNotasElegidasPorElUsuario.push({ nombre: nombreEscritoDelBotonPresionado, frecuencia: frecuenciaDelBotonPresionado });
+                listaDeNotasElegidasPorElUsuario.push({ 
+                    nombre: nombreEscritoDelBotonPresionado, 
+                    frecuencia: frecuenciaDelBotonPresionado 
+                });
                 
-                cuadroDeMensajeVisualSeptimas.textContent = `Notas seleccionadas (${listaDeNotasElegidasPorElUsuario.length}/${cantidadDeNotasRequeridasParaEsteReto}). Elige las que faltan y la cualidad.`;
+                cuadroDeMensajeVisualSeptimas.textContent = `Notas seleccionadas (${listaDeNotasElegidasPorElUsuario.length}/${cantidadNotasRequeridas}). Elige las que faltan y la cualidad.`;
 
-                // Evaluamos automáticamente cuando se llenan los cupos
-                if (listaDeNotasElegidasPorElUsuario.length === cantidadDeNotasRequeridasParaEsteReto && cualidadElegidaPorElUsuario) {
+                const usuarioCompletoLasNotas = listaDeNotasElegidasPorElUsuario.length === cantidadNotasRequeridas;
+                const usuarioSeleccionoCualidad = cualidadElegidaPorElUsuario !== null;
+
+                if (usuarioCompletoLasNotas && usuarioSeleccionoCualidad) {
                     validarResultadoDelAcordeDeSeptima();
                 }
             }
@@ -157,7 +219,7 @@
     }
 
     // ------------------------------------------------------
-    // 6. INTERACCIÓN CON LOS BOTONES DE CUALIDAD (Maj7, 7, etc.)
+    // 6. INTERACCIÓN CON LOS BOTONES DE CUALIDAD
     // ------------------------------------------------------
     listaDeBotonesDeCualidadSeptima.forEach(botonDeCualidadIndividual => {
         botonDeCualidadIndividual.addEventListener("click", () => {
@@ -171,8 +233,15 @@
             
             cualidadElegidaPorElUsuario = botonDeCualidadIndividual.getAttribute("data-cualidad");
 
-            const cantidadDeNotasRequeridasParaEsteReto = listaDeNotasDelAcordeSecretoSeptima.length;
-            if (listaDeNotasElegidasPorElUsuario.length === cantidadDeNotasRequeridasParaEsteReto && cualidadElegidaPorElUsuario) {
+            let cantidadNotasRequeridas = 4;
+            if (listaDeNotasElegidasPorElUsuario.length > 0) {
+                cantidadNotasRequeridas = listaDeNotasElegidasPorElUsuario.length;
+            }
+
+            const usuarioCompletoLasNotas = listaDeNotasElegidasPorElUsuario.length === cantidadNotasRequeridas;
+            const usuarioSeleccionoCualidad = cualidadElegidaPorElUsuario !== null;
+
+            if (usuarioCompletoLasNotas && usuarioSeleccionoCualidad) {
                 validarResultadoDelAcordeDeSeptima();
             }
         });
@@ -191,32 +260,60 @@
             listaDeBotonesDeCualidadSeptima.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
             
             botonParaBorrarSeleccionSeptimas.classList.add("oculto");
-            
-            const cantidadDeNotasRequeridasParaEsteReto = listaDeNotasDelAcordeSecretoSeptima.length;
-            cuadroDeMensajeVisualSeptimas.textContent = `Selección borrada. Vuelve a elegir las ${cantidadDeNotasRequeridasParaEsteReto} notas y la cualidad.`;
+            cuadroDeMensajeVisualSeptimas.textContent = "Selección borrada. Vuelve a elegir las notas y la cualidad.";
         });
     }
 
     // ------------------------------------------------------
-    // 8. EVALUACIÓN FINAL DEL RETO (40 PUNTOS)
+    // 8. EVALUACIÓN FINAL DEL RETO
     // ------------------------------------------------------
     async function validarResultadoDelAcordeDeSeptima() {
         
-        const frecuenciasSecretasOrdenadas = listaDeNotasDelAcordeSecretoSeptima.map(nota => nota.frecuencia).sort((a, b) => a - b);
-        const frecuenciasDelUsuarioOrdenadas = listaDeNotasElegidasPorElUsuario.map(nota => nota.frecuencia).sort((a, b) => a - b);
+        // Normalizamos las frecuencias secretas a su octava base de manera explícita
+        const frecuenciasSecretasBase = listaDeNotasDelAcordeSecretoSeptima.map(objetoNota => {
+            let frecuenciaActual = objetoNota.frecuencia;
+            while (frecuenciaActual > 500) {
+                frecuenciaActual = frecuenciaActual / 2;
+            }
+            return Math.round(frecuenciaActual * 10) / 10;
+        });
 
-        const lasNotasSonIdenticas = frecuenciasSecretasOrdenadas.every((frecuenciaSecreta, indice) => 
-            Math.abs(frecuenciaSecreta - frecuenciasDelUsuarioOrdenadas[indice]) < 0.1
-        );
+        // Normalizamos las frecuencias elegidas por el usuario
+        const frecuenciasUsuarioBase = listaDeNotasElegidasPorElUsuario.map(objetoNota => {
+            let frecuenciaActual = objetoNota.frecuencia;
+            while (frecuenciaActual > 500) {
+                frecuenciaActual = frecuenciaActual / 2;
+            }
+            return Math.round(frecuenciaActual * 10) / 10;
+        });
+
+        // Eliminamos duplicados de octava para comparar la estructura base limpia
+        const frecuenciasSecretasUnicas = [...new Set(frecuenciasSecretasBase)].sort((a, b) => a - b);
+        const frecuenciasUsuarioUnicas = [...new Set(frecuenciasUsuarioBase)].sort((a, b) => a - b);
+
+        let lasNotasSonIdenticas = true;
+        frecuenciasSecretasUnicas.forEach((frecuenciaSecreta, indice) => {
+            const frecuenciaUsuarioCorrespondiente = frecuenciasUsuarioUnicas[indice];
+            if (frecuenciaUsuarioCorrespondiente === undefined) {
+                lasNotasSonIdenticas = false;
+            } else {
+                const diferenciaFrecuencias = Math.abs(frecuenciaSecreta - frecuenciaUsuarioCorrespondiente);
+                if (diferenciaFrecuencias >= 1.0) {
+                    lasNotasSonIdenticas = false;
+                }
+            }
+        });
         
         const laCualidadEsCorrecta = cualidadElegidaPorElUsuario === cualidadSecretaDelAcordeSeptima;
 
         if (lasNotasSonIdenticas && laCualidadEsCorrecta) {
-            cuadroDeMensajeVisualSeptimas.textContent = `🎉 ¡Correcto! Acorde ${cualidadSecretaDelAcordeSeptima} identificado. (+40 pts)`;
+            cuadroDeMensajeVisualSeptimas.textContent = `🎉 ¡Correcto! Acorde ${cualidadSecretaDelAcordeSeptima} identificado con inversión. (+40 pts)`;
             cuadroDeMensajeVisualSeptimas.className = "mensaje-exito";
             
             contadorDePuntosTotalesSeptimas += 40; 
-            if (etiquetaPuntajeMostradoSeptimas) etiquetaPuntajeMostradoSeptimas.textContent = contadorDePuntosTotalesSeptimas;
+            if (etiquetaPuntajeMostradoSeptimas) {
+                etiquetaPuntajeMostradoSeptimas.textContent = contadorDePuntosTotalesSeptimas;
+            }
             
             await window.guardarPuntajeGenerico(40, "Acordes de Séptima", "acierto");
         } else {
@@ -233,6 +330,9 @@
         const botonesDeLaCuadricula = cuadriculaDeNotasSeptimas.querySelectorAll(".boton-nota-triada");
         botonesDeLaCuadricula.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
         listaDeBotonesDeCualidadSeptima.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
-        if (botonParaBorrarSeleccionSeptimas) botonParaBorrarSeleccionSeptimas.classList.add("oculto");
+        
+        if (botonParaBorrarSeleccionSeptimas) {
+            botonParaBorrarSeleccionSeptimas.classList.add("oculto");
+        }
     }
 });

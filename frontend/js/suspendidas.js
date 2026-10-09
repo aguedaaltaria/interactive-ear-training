@@ -1,8 +1,7 @@
 /* ==========================================================
-   LÓGICA DEL NIVEL 5: TRÍADAS SUSPENDIDAS (suspendidas.js)
+   LÓGICA DEL NIVEL 5: TRÍADAS SUSPENDIDAS E INVERSIONES (suspendidas.js)
    ========================================================== */
 
-// Esperamos que el HTML cargue completamente antes de actuar
 document.addEventListener("DOMContentLoaded", () => {
     
     // ------------------------------------------------------
@@ -33,10 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         cuadriculaDeNotasSuspendidas.innerHTML = "";
         
-        // Reutilizamos el banco de 24 notas global
         window.bancoNotas24.forEach((notaIndividualDelBanco, numeroDeIndice) => {
             const nuevoBotonDeNota = document.createElement("button");
-            // Usamos la misma clase que las triadas normales para mantener el estilo naranja
             nuevoBotonDeNota.className = "boton-nota-triada";
             nuevoBotonDeNota.textContent = notaIndividualDelBanco.nombre;
             
@@ -54,40 +51,55 @@ document.addEventListener("DOMContentLoaded", () => {
     if (botonDeEscucharAcordeSuspendido) {
         botonDeEscucharAcordeSuspendido.addEventListener("click", () => {
             
-            // Si no hay un acorde generado, construimos uno nuevo
             if (listaDeNotasDelAcordeSecretoSuspendido.length === 0) {
                 
-                // Elegimos la nota Raíz (máximo índice 16 porque la Quinta Justa suma 7 semitonos)
-                const indiceDeLaNotaRaiz = Math.floor(Math.random() * 16);
+                // Margen seguro para que el acorde y su inversión quepan en los 24 botones
+                const indiceDeLaNotaRaiz = Math.floor(Math.random() * 15);
                 
-                // Diccionario de cualidades suspendidas (Sus2 y Sus4)
-                // Sus2: Raíz, Segunda Mayor (2 semitonos), Quinta Justa (7 semitonos)
-                // Sus4: Raíz, Cuarta Justa (5 semitonos), Quinta Justa (7 semitonos)
                 const listaDeCualidadesSuspendidas = [
                     { nombre: "sus2", distanciaMedia: 2, distanciaQuinta: 7 },
                     { nombre: "sus4", distanciaMedia: 5, distanciaQuinta: 7 }
                 ];
                 
-                // Elegimos aleatoriamente si será Sus2 o Sus4
                 const objetoDeCualidadSeleccionada = listaDeCualidadesSuspendidas[Math.floor(Math.random() * listaDeCualidadesSuspendidas.length)];
                 cualidadSecretaDelAcordeSuspendido = objetoDeCualidadSeleccionada.nombre;
 
-                const indiceNotaUno = indiceDeLaNotaRaiz;
-                const indiceNotaDos = indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaMedia;
-                const indiceNotaTres = indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaQuinta;
+                // Obtenemos las 3 notas base en estado fundamental
+                let notaRaiz = window.bancoNotas24[indiceDeLaNotaRaiz];
+                let notaMedia = window.bancoNotas24[indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaMedia];
+                let notaQuinta = window.bancoNotas24[indiceDeLaNotaRaiz + objetoDeCualidadSeleccionada.distanciaQuinta];
 
-                // Guardamos las 3 notas reales sacadas del banco
-                listaDeNotasDelAcordeSecretoSuspendido = [
-                    window.bancoNotas24[indiceNotaUno],
-                    window.bancoNotas24[indiceNotaDos],
-                    window.bancoNotas24[indiceNotaTres]
-                ];
+                let notasBase = [notaRaiz, notaMedia, notaQuinta];
 
-                // Limpiamos las elecciones previas del usuario
+                // 🎲 APLICAR INVERSIONES (50% Fundamental, 25% 1ra Inversión, 25% 2da Inversión)
+                const probabilidadInversion = Math.random() * 100;
+                let notasInvertidas = [...notasBase];
+
+                if (probabilidadInversion >= 50 && probabilidadInversion < 75) {
+                    // 1ra Inversión: La nota media pasa al bajo, la fundamental sube una octava
+                    let notaRaizOctava = { nombre: notaRaiz.nombre + " (St)", frecuencia: notaRaiz.frecuencia * 2 };
+                    notasInvertidas = [notaMedia, notaQuinta, notaRaizOctava];
+                } else if (probabilidadInversion >= 75) {
+                    // 2da Inversión: La quinta pasa al bajo, la fundamental y la nota media suben una octava
+                    let notaRaizOctava = { nombre: notaRaiz.nombre + " (St)", frecuencia: notaRaiz.frecuencia * 2 };
+                    let notaMediaOctava = { nombre: notaMedia.nombre + " (St)", frecuencia: notaMedia.frecuencia * 2 };
+                    notasInvertidas = [notaQuinta, notaRaizOctava, notaMediaOctava];
+                }
+
+                // 🎲 AÑADIR LA OCTAVA (A veces: 35% de probabilidad de duplicar la nota más grave arriba)
+                if (Math.random() * 100 < 35) {
+                    let notaBajoDuplicada = { 
+                        nombre: notasInvertidas[0].nombre + " (Dub)", 
+                        frecuencia: notasInvertidas[0].frecuencia * 2 
+                    };
+                    notasInvertidas.push(notaBajoDuplicada);
+                }
+
+                listaDeNotasDelAcordeSecretoSuspendido = notasInvertidas;
+
                 listaDeNotasElegidasPorElUsuario = [];
                 cualidadElegidaPorElUsuario = null;
                 
-                // Despintamos botones de la cuadrícula y de cualidad
                 const botonesDeLaCuadricula = cuadriculaDeNotasSuspendidas.querySelectorAll(".boton-nota-triada");
                 botonesDeLaCuadricula.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
                 listaDeBotonesDeCualidadSuspendida.forEach(botonIndividual => botonIndividual.classList.remove("seleccionada"));
@@ -95,10 +107,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (botonParaBorrarSeleccionSuspendidas) botonParaBorrarSeleccionSuspendidas.classList.add("oculto");
             }
 
-            cuadroDeMensajeVisualSuspendidas.textContent = "🔊 Reproduciendo tríada suspendida...";
+            cuadroDeMensajeVisualSuspendidas.textContent = "🔊 Reproduciendo tríada suspendida con inversiones y sonoridad real...";
             cuadroDeMensajeVisualSuspendidas.className = "mensaje-neutro";
 
-            // Reproducimos las 3 notas
+            // Reproducimos las frecuencias del acorde secreto
             window.reproducirSecuenciaAcorde(listaDeNotasDelAcordeSecretoSuspendido.map(notaIndividual => notaIndividual.frecuencia));
         });
     }
@@ -110,13 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
         cuadriculaDeNotasSuspendidas.addEventListener("click", (eventoDeClicGeneral) => {
             if (eventoDeClicGeneral.target.classList.contains("boton-nota-triada")) {
                 
-                // Validar que haya pedido escuchar el reto primero
                 if (listaDeNotasDelAcordeSecretoSuspendido.length === 0) {
                     cuadroDeMensajeVisualSuspendidas.textContent = "⚠️ Primero haz clic en 'Escuchar Tríada'.";
                     return;
                 }
                 
-                // Solo permitimos 3 notas máximo
                 if (listaDeNotasElegidasPorElUsuario.length >= 3) return;
 
                 const frecuenciaDelBotonPresionado = parseFloat(eventoDeClicGeneral.target.getAttribute("data-frecuencia"));
@@ -131,7 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 cuadroDeMensajeVisualSuspendidas.textContent = `Notas seleccionadas (${listaDeNotasElegidasPorElUsuario.length}/3). Elige las que faltan y la cualidad.`;
 
-                // Evaluamos si ya completó el reto
                 if (listaDeNotasElegidasPorElUsuario.length === 3 && cualidadElegidaPorElUsuario) {
                     validarResultadoDelAcordeSuspendido();
                 }
@@ -182,19 +191,37 @@ document.addEventListener("DOMContentLoaded", () => {
     // ------------------------------------------------------
     async function validarResultadoDelAcordeSuspendido() {
         
-        // Extraemos las frecuencias numéricas y las ordenamos de menor a mayor
-        const frecuenciasSecretasOrdenadas = listaDeNotasDelAcordeSecretoSuspendido.map(nota => nota.frecuencia).sort((a, b) => a - b);
-        const frecuenciasDelUsuarioOrdenadas = listaDeNotasElegidasPorElUsuario.map(nota => nota.frecuencia).sort((a, b) => a - b);
+        // Normalizamos las frecuencias del acorde secreto a su octava base
+        const frecuenciasSecretasBase = listaDeNotasDelAcordeSecretoSuspendido.map(objetoNota => {
+            let frecuenciaActual = objetoNota.frecuencia;
+            while (frecuenciaActual > 500) {
+                frecuenciaActual /= 2;
+            }
+            return Math.round(frecuenciaActual * 10) / 10;
+        });
 
-        // Comparamos nota por nota con un margen de error mínimo por los decimales de hertzios
-        const lasNotasSonIdenticas = frecuenciasSecretasOrdenadas.every((frecuenciaSecreta, indice) => 
-            Math.abs(frecuenciaSecreta - frecuenciasDelUsuarioOrdenadas[indice]) < 0.1
+        // Normalizamos las frecuencias elegidas por el usuario
+        const frecuenciasUsuarioBase = listaDeNotasElegidasPorElUsuario.map(objetoNota => {
+            let frecuenciaActual = objetoNota.frecuencia;
+            while (frecuenciaActual > 500) {
+                frecuenciaActual /= 2;
+            }
+            return Math.round(frecuenciaActual * 10) / 10;
+        });
+
+        // Ordenamos ambas listas de menor a mayor
+        frecuenciasSecretasBase.sort((a, b) => a - b);
+        frecuenciasUsuarioBase.sort((a, b) => a - b);
+
+        // Verificamos si las notas coinciden matemáticamente
+        const lasNotasSonIdenticas = frecuenciasSecretasBase.every((frecuenciaSecreta, indice) => 
+            Math.abs(frecuenciaSecreta - frecuenciasUsuarioBase[indice]) < 1.0
         );
         
         const laCualidadEsCorrecta = cualidadElegidaPorElUsuario === cualidadSecretaDelAcordeSuspendido;
 
         if (lasNotasSonIdenticas && laCualidadEsCorrecta) {
-            cuadroDeMensajeVisualSuspendidas.textContent = `🎉 ¡Correcto! Acorde ${cualidadSecretaDelAcordeSuspendido} identificado. (+25 pts)`;
+            cuadroDeMensajeVisualSuspendidas.textContent = `🎉 ¡Correcto! Acorde ${cualidadSecretaDelAcordeSuspendido} identificado con inversión. (+25 pts)`;
             cuadroDeMensajeVisualSuspendidas.className = "mensaje-exito";
             
             contadorDePuntosTotalesSuspendidas += 25;
@@ -208,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
             await window.guardarPuntajeGenerico(0, "Tríadas Suspendidas", "fallo");
         }
 
-        // Limpieza final de la ronda
         listaDeNotasDelAcordeSecretoSuspendido = [];
         listaDeNotasElegidasPorElUsuario = [];
         cualidadElegidaPorElUsuario = null;
