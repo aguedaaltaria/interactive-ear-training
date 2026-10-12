@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pantallaDelNivel4_Triadas = document.getElementById("vista-triadas");
     const pantallaDelNivel5_Suspendidas = document.getElementById("vista-suspendidas");
     const pantallaDelNivel6_Septimas = document.getElementById("vista-septimas");
+    const pantallaDelNivel7_Novenas = document.getElementById("vista-novenas");
 
     // 1.2 Buscamos los botones pequeños azules de "Volver" que están en la esquina superior de cada nivel
     const botonDeVolverDelNivel1 = document.getElementById("btn-volver");
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonDeVolverDelNivel4 = document.getElementById("btn-volver-triadas");
     const botonDeVolverDelNivel5 = document.getElementById("btn-volver-suspendidas");
     const botonDeVolverDelNivel6 = document.getElementById("btn-volver-septimas");
+    const botonDeVolverDelNivel7 = document.getElementById("btn-volver-novenas");
 
     // Variable de control para llevar el registro interno de dónde está jugando el usuario
     let nombreDelNivelActivo = "Notas Cromáticas";
@@ -62,6 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (tipoDeNivelElegido === "acordes-septima") {
                 nombreDelNivelActivo = "Acordes de Séptima";
                 if (pantallaDelNivel6_Septimas) pantallaDelNivel6_Septimas.classList.remove("oculto");
+            } else if (tipoDeNivelElegido === "acordes-novena") {
+                nombreDelNivelActivo = "Acordes de Novena";
+                if (pantallaDelNivel7_Novenas) {
+                    pantallaDelNivel7_Novenas.classList.remove("oculto");
+                } 
             }
         });
     });
@@ -107,6 +114,17 @@ document.addEventListener("DOMContentLoaded", () => {
         botonDeVolverDelNivel6.addEventListener("click", () => {
             if (pantallaDelNivel6_Septimas) pantallaDelNivel6_Septimas.classList.add("oculto");
             if (pantallaDelMenuPrincipal) pantallaDelMenuPrincipal.classList.remove("oculto");
+        });
+    }
+
+    if (botonDeVolverDelNivel7) {
+        botonDeVolverDelNivel7.addEventListener("click", () => {
+            if (pantallaDelNivel7_Novenas) {
+                pantallaDelNivel7_Novenas.classList.add("oculto");
+            }
+            if (pantallaDelMenuPrincipal) {
+                pantallaDelMenuPrincipal.classList.remove("oculto");
+            }
         });
     }
 

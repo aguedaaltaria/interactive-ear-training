@@ -89,6 +89,9 @@
             <button class="boton-nivel" data-nivel="acordes-septima">
                 🎹 Acordes de Séptima (Tétradas) <span class="badge-nivel">Nivel 6</span>
             </button>
+            <button class="boton-nivel" data-nivel="acordes-novena">
+                🎷 Acordes de Novena (Extensiones) <span class="badge-nivel">Nivel 7</span>
+            </button>
         </div>
     </div>
 
@@ -384,6 +387,58 @@
         </div>
     </div>
 
+    <!-- 🌟 Vista 8: Nivel 7 - Acordes de Novena -->
+    <div id="vista-novenas" class="tarjeta-juego oculto">
+        <div id="indicador-usuario-flotante-novenas" class="badge-usuario-activo oculto">
+            <span>👤 <strong id="nombre-usuario-badge-novenas"></strong></span>
+            <button id="btn-cambiar-usuario-novenas" title="Cambiar de usuario">Cambiar</button>
+        </div>
+
+        <button id="btn-volver-novenas" class="btn-volver">← Volver</button>
+
+        <h2 class="titulo-menu">Acordes de Novena (Nivel 7)</h2>
+        <p class="subtitulo-menu">Identifica las notas (omitiendo la quinta justa cuando corresponda) y la cualidad del acorde de novena.</p>
+    
+        <div style="text-align: center;">
+            <div id="marcador-puntaje-novenas" class="marcador">Puntaje Total: <span>0</span> pts</div>
+        </div>
+    
+        <div style="margin-bottom: 0.75rem;">
+            <button id="boton-reto-novenas" class="btn-reto-principal">
+                🔊 Escuchar Acorde de Novena
+            </button>
+        </div>
+    
+        <div id="panel-estado-novenas" class="panel-seleccion">
+            <span id="mensaje-estado-novenas">Haz clic en 'Escuchar Acorde' para comenzar.</span>
+            <button id="btn-deseleccionar-novenas" class="boton-borrar oculto">🗑️ Borrar</button>
+        </div>
+    
+        <div id="grid-notas-novenas" class="contenedor-botones-36"></div>
+    
+        <div class="contenedor-opciones-intervalos">
+            <p class="subtitulo-menu" style="margin-bottom: 0.5rem;">Cualidad del Acorde:</p>
+            <div class="grid-opciones" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%;">
+                <button class="btn-cualidad-novena btn-cualidad" data-cualidad="Maj9" style="width: 100%;">
+                    Maj9<br><small style="font-size: 0.75em; font-weight: normal;">(Mayor 9na)</small>
+                </button>
+                <button class="btn-cualidad-novena btn-cualidad" data-cualidad="9" style="width: 100%;">
+                    9<br><small style="font-size: 0.75em; font-weight: normal;">(Dominante 9na)</small>
+                </button>
+                <button class="btn-cualidad-novena btn-cualidad" data-cualidad="m9" style="width: 100%;">
+                    m9<br><small style="font-size: 0.75em; font-weight: normal;">(Menor 9na)</small>
+                </button>
+            </div>
+        </div>
+    
+        <div style="margin-top: 1.5rem; border-top: 1px solid var(--color-borde); padding-top: 1rem;">
+            <h3 style="font-size: 0.95rem; color: var(--color-texto-oscuro); margin-bottom: 0.5rem;">Últimos Puntajes del Nivel</h3>
+            <ul id="lista-historial-novenas" class="lista-historial">
+                <li style='justify-content: center; color: var(--color-texto-suave);'>No hay puntajes registrados aún para este usuario.</li>
+            </ul>
+        </div>
+    </div>
+
     <script src="/js/auth.js"></script>
     <script src="/js/audio.js"></script>
     <script src="/js/niveles.js"></script>
@@ -391,5 +446,7 @@
     <script src="/js/triadas.js"></script>
     <script src="/js/suspendidas.js"></script>
     <script src="/js/septimas.js"></script>
+    <script src="/js/novenas.js"></script>
+    <script src="/js/novenas2.js"></script>
 </body>
 </html>

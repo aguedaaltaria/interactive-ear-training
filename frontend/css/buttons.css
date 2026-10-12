@@ -190,3 +190,29 @@ button.boton-nota:hover {
     background-color: var(--color-volver-hover);
     transform: translateY(-1px);
 }
+
+.boton-nota-pequeno {
+    /* Usa el color mostaza directamente para evitar fallos de variables */
+    background-color: #fbc02d; 
+    color: var(--color-texto-oscuro);
+    border: 1px solid #e0a800;
+    border-radius: 4px;
+    padding: 0.5rem 0.1rem;
+    font-size: 0.75rem; 
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    text-align: center;
+    font-weight: bold;
+}
+
+.boton-nota-pequeno:hover {
+    background-color: #f9a825; /* Un mostaza un poco más oscuro al pasar el mouse */
+}
+
+/* Cuando el usuario lo selecciona, cambia a azul forzadamente */
+.boton-nota-pequeno.seleccionada {
+    background-color: var(--color-primario, #007bff) !important;
+    color: white !important;
+    transform: scale(0.90) !important;
+    border-color: var(--color-primario, #0056b3) !important;
+}

@@ -218,3 +218,12 @@
     color: var(--color-primario);
     margin: 0;
 }
+/* Cuadrícula extendida para 36 notas */
+.contenedor-botones-36 {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin: 1rem auto;
+    width: 100%;
+}
+

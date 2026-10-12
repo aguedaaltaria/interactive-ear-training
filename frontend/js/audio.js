@@ -48,6 +48,30 @@ window.bancoNotas24 = [
     { nombre: "La#5 / Sib5", frecuencia: 932.33 }, { nombre: "Si 5", frecuencia: 987.77 }
 ];
 
+// EL BANCO EXTENDIDO DE 36 NOTAS (3 Octavas para niveles avanzados)
+window.bancoNotas36 = [
+    { nombre: "Do 4", frecuencia: 261.63 }, { nombre: "Do#4 / Reb4", frecuencia: 277.18 },
+    { nombre: "Re 4", frecuencia: 293.66 }, { nombre: "Re#4 / Mib4", frecuencia: 311.13 },
+    { nombre: "Mi 4", frecuencia: 329.63 }, { nombre: "Fa 4", frecuencia: 349.23 },
+    { nombre: "Fa#4 / Solb4", frecuencia: 369.99 }, { nombre: "Sol 4", frecuencia: 392.00 },
+    { nombre: "Sol#4 / Lab4", frecuencia: 415.30 }, { nombre: "La 4", frecuencia: 440.00 },
+    { nombre: "La#4 / Sib4", frecuencia: 466.16 }, { nombre: "Si 4", frecuencia: 493.88 },
+    
+    { nombre: "Do 5", frecuencia: 523.25 }, { nombre: "Do#5 / Reb5", frecuencia: 554.37 },
+    { nombre: "Re 5", frecuencia: 587.33 }, { nombre: "Re#5 / Mib5", frecuencia: 622.25 },
+    { nombre: "Mi 5", frecuencia: 659.25 }, { nombre: "Fa 5", frecuencia: 698.46 },
+    { nombre: "Fa#5 / Solb5", frecuencia: 739.99 }, { nombre: "Sol 5", frecuencia: 783.99 },
+    { nombre: "Sol#5 / Lab5", frecuencia: 830.61 }, { nombre: "La 5", frecuencia: 880.00 },
+    { nombre: "La#5 / Sib5", frecuencia: 932.33 }, { nombre: "Si 5", frecuencia: 987.77 },
+    
+    { nombre: "Do 6", frecuencia: 1046.50 }, { nombre: "Do#6 / Reb6", frecuencia: 1108.73 },
+    { nombre: "Re 6", frecuencia: 1174.66 }, { nombre: "Re#6 / Mib6", frecuencia: 1244.51 },
+    { nombre: "Mi 6", frecuencia: 1318.51 }, { nombre: "Fa 6", frecuencia: 1396.91 },
+    { nombre: "Fa#6 / Solb6", frecuencia: 1479.98 }, { nombre: "Sol 6", frecuencia: 1567.98 },
+    { nombre: "Sol#6 / Lab6", frecuencia: 1661.22 }, { nombre: "La 6", frecuencia: 1760.00 },
+    { nombre: "La#6 / Sib6", frecuencia: 1864.66 }, { nombre: "Si 6", frecuencia: 1975.53 }
+];
+
 // 2. REPRODUCTOR DE TONO BÁSICO (Para el Nivel 1 o clics rápidos)
 window.reproducirTono = function(frecuenciaHertzios) {
     // Inicializamos el motor de audio que viene escondido en tu navegador web
@@ -184,7 +208,8 @@ window.cargarHistorial = async function() {
             "lista-historial-compuestos", 
             "lista-historial-triadas",
             "lista-historial-suspendidas",
-            "lista-historial-septimas"
+            "lista-historial-septimas",
+            "lista-historial-novenas" 
         ];
 
         // Recorremos una por una las cajas y las rellenamos con la información
