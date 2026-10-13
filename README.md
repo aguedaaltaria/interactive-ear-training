@@ -32,5 +32,5 @@ Sigue estos pasos para correr el proyecto en tu entorno local:
 
 1. **Clona el repositorio:**
    ```bash
-   git clone [https://github.com/tu-usuario/interactive-ear-training.git](https://github.com/tu-usuario/interactive-ear-training.git)
+   git clone https://github.com/aguedaaltaria/interactive-ear-training.git
    cd interactive-ear-training
